@@ -9,7 +9,9 @@ use Livewire\Attributes\Layout;
 use Livewire\Volt\Component;
 
 new #[Layout('components.layouts.auth')] class extends Component {
-    public string $name = '';
+    public string $first_name = '';
+    public string $last_name = '';
+    public string $phone = '';
     public string $email = '';
     public string $password = '';
     public string $password_confirmation = '';
@@ -20,7 +22,9 @@ new #[Layout('components.layouts.auth')] class extends Component {
     public function register(): void
     {
         $validated = $this->validate([
-            'name' => ['required', 'string', 'max:255'],
+            'first_name' => ['required', 'string', 'max:255'],
+            'last_name' => ['required', 'string', 'max:255'],
+            'phone' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
             'password' => ['required', 'string', 'confirmed', Rules\Password::defaults()],
         ]);
@@ -34,7 +38,6 @@ new #[Layout('components.layouts.auth')] class extends Component {
         $this->redirectIntended(route('dashboard', absolute: false), navigate: true);
     }
 }; ?>
-
 <div class="flex flex-col gap-6">
     <x-auth-header :title="__('Create an account')" :description="__('Enter your details below to create your account')" />
 
@@ -42,48 +45,28 @@ new #[Layout('components.layouts.auth')] class extends Component {
     <x-auth-session-status class="text-center" :status="session('status')" />
 
     <form wire:submit="register" class="flex flex-col gap-6">
-        <!-- Name -->
-        <flux:input
-            wire:model="name"
-            :label="__('Name')"
-            type="text"
-            required
-            autofocus
-            autocomplete="name"
-            :placeholder="__('Full name')"
-        />
+        <!-- First Name -->
+        <flux:input wire:model="first_name" :label="__('First name')" type="text" required autofocus
+            autocomplete="first_name" :placeholder="__('First name')" />
+        <!-- Last Name -->
+        <flux:input wire:model="last_name" :label="__('Last name')" type="text" required autofocus
+            autocomplete="last_name" :placeholder="__('Last name')" />
+
+        <!-- Phone -->
+        <flux:input wire:model="phone" :label="__('Phone')" type="tel" required autofocus autocomplete="phone"
+            :placeholder="__('Phone')" />
 
         <!-- Email Address -->
-        <flux:input
-            wire:model="email"
-            :label="__('Email address')"
-            type="email"
-            required
-            autocomplete="email"
-            placeholder="email@example.com"
-        />
+        <flux:input wire:model="email" :label="__('Email address')" type="email" required autocomplete="email"
+            placeholder="email@example.com" />
 
         <!-- Password -->
-        <flux:input
-            wire:model="password"
-            :label="__('Password')"
-            type="password"
-            required
-            autocomplete="new-password"
-            :placeholder="__('Password')"
-            viewable
-        />
+        <flux:input wire:model="password" :label="__('Password')" type="password" required autocomplete="new-password"
+            :placeholder="__('Password')" viewable />
 
         <!-- Confirm Password -->
-        <flux:input
-            wire:model="password_confirmation"
-            :label="__('Confirm password')"
-            type="password"
-            required
-            autocomplete="new-password"
-            :placeholder="__('Confirm password')"
-            viewable
-        />
+        <flux:input wire:model="password_confirmation" :label="__('Confirm password')" type="password" required
+            autocomplete="new-password" :placeholder="__('Confirm password')" viewable />
 
         <div class="flex items-center justify-end">
             <flux:button type="submit" variant="primary" class="w-full">

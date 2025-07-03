@@ -68,7 +68,7 @@ new class extends Component {
 };
 ?>
 
-<section class="py-12 px-4 md:px-10 bg-zinc-100 dark:bg-zinc-900 m-10">
+<section class="py-12 px-4 md:px-10 bg-white dark:bg-zinc-900 mt-10">
     <h2 class="text-2xl md:text-3xl font-bold text-zinc-800 dark:text-white mb-8 text-center">Featured Products</h2>
 
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">

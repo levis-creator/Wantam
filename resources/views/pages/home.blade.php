@@ -1,8 +1,10 @@
 <x-layouts.guest.main :title="__('Home')">
     {{-- 1. Hero Section (Top Banner + Categories Sidebar) --}}
-    <div class="grid grid-cols-1 md:grid-cols-4 gap-10 max-h-[500px]">
-        <livewire:components.home.category-sidebar />
-        <div class="md:col-span-3 bg-white dark:bg-zinc-800 p-0 rounded shadow-sm flex h-full">
+    <div class="grid grid-cols-1 lg:grid-cols-4  gap-10 lg:max-h-[500px]">
+        <div class="relative py-10 w-full lg:block col-span-1 lg:mr-10">
+            <livewire:components.home.category-sidebar />
+        </div>
+        <div class=" col-span-1 md:col-span-3  bg-white dark:bg-zinc-800 p-0 rounded shadow-sm flex h-[500px]">
             <livewire:components.home.hero-carousel />
         </div>
     </div>

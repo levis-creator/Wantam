@@ -11,16 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('categories', function (Blueprint $table) {
+        Schema::create('advertisements', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->string('name');
-            $table->string('slug')->unique();
-            $table->string(column: 'description')->nullable();
-            $table->foreignUuid('parent_id')
-                ->nullable()
-                ->constrained('categories')
-                ->nullOnDelete();
-            $table->string('image')->nullable();
+            $table->string('title')->nullable();
+            $table->string('image'); // banner image
+            $table->string('link')->nullable(); // redirect on click
+            $table->foreignUuid('product_id')->nullable()->constrained()->nullOnDelete();
+            $table->timestamp('starts_at')->nullable();
+            $table->timestamp('ends_at')->nullable();
             $table->boolean('is_active')->default(true);
             $table->timestamps();
         });
@@ -31,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('categories');
+        Schema::dropIfExists('advertisement');
     }
 };

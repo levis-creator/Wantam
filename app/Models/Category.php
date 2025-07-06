@@ -2,9 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Concerns\HasUuids;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Support\Str;
 
 class Category extends Model
@@ -12,7 +12,17 @@ class Category extends Model
     use HasFactory, HasUuids;
 
     /**
-     * The attributes that are mass assignable.
+     * Indicates if the IDs are auto-incrementing.
+     */
+    public $incrementing = false;
+
+    /**
+     * The data type of the primary key.
+     */
+    protected $keyType = 'string';
+
+    /**
+     * Mass assignable attributes.
      *
      * @var array<string>
      */
@@ -21,11 +31,12 @@ class Category extends Model
         'slug',
         'description',
         'image',
+        'parent_id',
         'is_active',
     ];
 
     /**
-     * The attributes that should be cast.
+     * Attribute type casting.
      *
      * @var array<string, string>
      */
@@ -34,17 +45,46 @@ class Category extends Model
     ];
 
     /**
-     * Get the route key for the model.
+     * Eager-load children automatically if needed.
      *
-     * @return string
+     * (Uncomment if you commonly access children)
      */
-    public function getRouteKeyName()
+    // protected $with = ['children'];
+
+    /**
+     * Self-referencing parent relationship.
+     */
+    public function parent()
+    {
+        return $this->belongsTo(self::class, 'parent_id');
+    }
+
+    /**
+     * Self-referencing children relationship.
+     */
+    public function children()
+    {
+        return $this->hasMany(self::class, 'parent_id');
+    }
+
+    /**
+     * Use slug for route model binding.
+     */
+    public function getRouteKeyName(): string
     {
         return 'slug';
     }
 
     /**
-     * Scope a query to only include active categories.
+     * Accessor for full image URL.
+     */
+    public function getImageUrlAttribute(): ?string
+    {
+        return $this->image ? asset('storage/' . $this->image) : null;
+    }
+
+    /**
+     * Scope for active categories.
      */
     public function scopeActive($query)
     {
@@ -52,30 +92,47 @@ class Category extends Model
     }
 
     /**
-     * Scope a query to only include inactive categories.
+     * Scope for inactive categories.
      */
     public function scopeInactive($query)
     {
         return $query->where('is_active', false);
     }
-    protected static function boot()
+
+    /**
+     * Boot method to auto-generate slugs on create/update.
+     */
+    protected static function booted(): void
     {
-        parent::boot();
-        static::creating(function ($category) {
-            $baseSlug = Str::slug($category->name);
-            $category->slug = $baseSlug . '-' . Str::substr($category->id, 0, 8);
+        static::creating(function (self $category) {
+            $category->slug = self::generateSlug($category->name, $category->parent_id);
         });
 
-
-        static::updating(function ($category) {
-            if ($category->isDirty('name')) {
-                $category->slug = Str::slug($category->name);
+        static::updating(function (self $category) {
+            if ($category->isDirty('name') || $category->isDirty('parent_id')) {
+                $category->slug = self::generateSlug($category->name, $category->parent_id);
             }
         });
     }
 
-    public function getImageUrlAttribute()
+    /**
+     * Generate slug including parent prefix if applicable.
+     */
+    protected static function generateSlug(string $name, ?string $parentId): string
     {
-        return $this->image ? asset('storage/' . $this->image) : null;
+        $baseSlug = Str::slug($name);
+
+        if ($parentId) {
+            $parent = self::find($parentId);
+            if ($parent) {
+                return $parent->slug . '-' . $baseSlug;
+            }
+        }
+
+        return $baseSlug;
+    }
+    public function scopeParents($query)
+    {
+        return $query->whereNull('parent_id');
     }
 }

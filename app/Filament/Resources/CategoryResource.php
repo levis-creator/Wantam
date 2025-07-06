@@ -14,9 +14,11 @@ use Illuminate\Support\Str;
 class CategoryResource extends Resource
 {
     protected static ?string $model = Category::class;
-    protected static ?string $navigationIcon = 'heroicon-o-tag';
+    protected static ?string $navigationIcon = 'heroicon-o-rectangle-group';
     protected static ?string $modelLabel = 'Category';
-    protected static ?string $navigationGroup = 'Content';
+    protected static ?string $navigationGroup = 'Catalog Management';
+    protected static ?int $navigationSort = 1;
+
 
     public static function form(Form $form): Form
     {
@@ -30,23 +32,21 @@ class CategoryResource extends Resource
                                     ->required()
                                     ->maxLength(255)
                                     ->live(onBlur: true)
-                                    ->afterStateUpdated(function (string $operation, $state, Forms\Set $set) {
-                                        if ($operation === 'create') {
-                                            $set('slug', Str::slug($state));
-                                        }
-                                    }),
+                                    ->columnSpan(6),
 
-                                Forms\Components\TextInput::make('slug')
-                                    ->required()
-                                    ->disabled()
-                                    ->dehydrated()
-                                    ->maxLength(255)
-                                    ->unique(Category::class, 'slug', ignoreRecord: true),
-                            ]),
-
+                                Forms\Components\Select::make('parent_id')
+                                    ->label('Parent Category')
+                                    ->relationship('parent', 'name')
+                                    ->searchable()
+                                    ->preload()
+                                    ->nullable()
+                                    ->helperText('Optional: Set if this is a subcategory')
+                                    ->columnSpan(6),
+                            ])
+                            ->columns(12),
                         Forms\Components\Textarea::make('description')
-                            ->columnSpanFull()
-                            ->maxLength(500),
+                            ->maxLength(500)
+                            ->columnSpanFull(),
 
                         Forms\Components\FileUpload::make('image')
                             ->image()
@@ -56,7 +56,7 @@ class CategoryResource extends Resource
                         Forms\Components\Toggle::make('is_active')
                             ->required()
                             ->default(true),
-                    ])
+                    ]),
             ]);
     }
 
@@ -75,6 +75,12 @@ class CategoryResource extends Resource
                     ->searchable()
                     ->toggleable(isToggledHiddenByDefault: true),
 
+                Tables\Columns\TextColumn::make('parent.name')
+                    ->label('Parent Category')
+                    ->sortable()
+                    ->searchable()
+                    ->toggleable(),
+
                 Tables\Columns\IconColumn::make('is_active')
                     ->boolean()
                     ->label('Active')
@@ -90,17 +96,14 @@ class CategoryResource extends Resource
                     ->label('Active Status')
                     ->trueLabel('Only Active')
                     ->falseLabel('Only Inactive'),
-                // Removed TrashedFilter
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
-                // Removed ForceDeleteAction and RestoreAction
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
-                    // Removed ForceDeleteBulkAction and RestoreBulkAction
                 ]),
             ]);
     }
@@ -113,6 +116,4 @@ class CategoryResource extends Resource
             'edit' => Pages\EditCategory::route('/{record}/edit'),
         ];
     }
-
-    // Removed getEloquentQuery() method since we don't need it without soft deletes
 }

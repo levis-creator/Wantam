@@ -1,12 +1,6 @@
-<header 
-    x-data="{ show: false }" 
-    x-init="setTimeout(() => show = true, 100)" 
-    x-show="show" 
-    x-transition:enter="transition ease-out duration-700"
-    x-transition:enter-start="opacity-0 -translate-y-5"
-    x-transition:enter-end="opacity-100 translate-y-0"
-    class="sticky top-0 z-50"
->
+<header x-data="{ show: false }" x-init="setTimeout(() => show = true, 100)" x-show="show" x-transition:enter="transition ease-out duration-700"
+    x-transition:enter-start="opacity-0 -translate-y-5" x-transition:enter-end="opacity-100 translate-y-0"
+    class="sticky top-0 z-50">
     {{-- Topbar --}}
     <div class="bg-zinc-100 dark:bg-zinc-800 px-4 md:px-28 py-3 flex items-center justify-between gap-2 text-sm">
         <div>
@@ -15,7 +9,7 @@
         <div class="flex items-center gap-4">
             {{-- Dark Mode Toggle --}}
             <livewire:components.theme-toggle />
-            <a href="#" class="hover:underline">{{ __('Admin Login') }}</a>
+            <a href="/admin/login" wire:navigate class="hover:underline">{{ __('Admin Login') }}</a>
         </div>
     </div>
 

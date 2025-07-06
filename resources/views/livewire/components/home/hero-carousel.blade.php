@@ -1,31 +1,20 @@
 <?php
 
+use App\Models\Advertisement;
 use Livewire\Volt\Component;
 
 new class extends Component {
-    public array $slides = [
-        [
-            'id' => 1,
-            'image' => 'https://picsum.photos/id/1015/1200/500',
-            'title' => 'Wireless Headphones',
-            'description' => 'Experience premium sound quality with our latest noise-cancelling headphones.',
-            'link' => '#',
-        ],
-        [
-            'id' => 2,
-            'image' => 'https://picsum.photos/id/1025/1200/500',
-            'title' => 'Stylish Men’s Watch',
-            'description' => 'Upgrade your style with our classic and modern watch collections.',
-            'link' => '#',
-        ],
-        [
-            'id' => 3,
-            'image' => 'https://fastly.picsum.photos/id/1044/1200/500.jpg?hmac=4kX2Fpz780LzsF1oNougfExnsGCqmFLvcomllkEm-ww',
-            'title' => 'Kitchen Essentials',
-            'description' => 'Blend, cook and create with our best-in-class kitchen appliances.',
-            'link' => '#',
-        ],
-    ];
+    public $slides;
+
+    public function mount()
+    {
+        $this->slides = Advertisement::current()
+            ->whereNotNull('image')
+            ->orderBy('starts_at', 'desc')
+            ->take(5)
+            ->select('id', 'title', 'image', 'link') // add 'description' if it exists
+            ->get();
+    }
 };
 ?>
 

@@ -36,10 +36,15 @@ jobs:
           npm run build || echo "No build script found, skipping"
 
       - name: Generate .env from GitHub Secret
-        run: echo "${{ secrets.LARAVEL_ENV }}" > .env
+        run: |
+          echo "${{ secrets.LARAVEL_ENV }}" > .env
+          cat .env
 
-      - name: Generate Laravel application key
-        run: php artisan key:generate
+      - name: Generate Laravel application key if missing
+        run: |
+          if ! grep -q '^APP_KEY=' .env; then
+            php artisan key:generate
+          fi
 
       - name: Prepare Laravel cache and storage
         run: |
@@ -50,7 +55,7 @@ jobs:
           chmod -R 775 storage bootstrap/cache || true
 
       - name: Create deployment artifact
-        run: zip -r release.zip . -x "node_modules/*" ".git/*" "tests/*"
+        run: zip -r release.zip . -x "node_modules/*" ".git/*" "tests/*" "*.zip"
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
@@ -80,6 +85,10 @@ jobs:
           client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_D1FBA7972BA345D0A42E34C05BA71340 }}
           tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_85591C6A813542448B5D43FAA2641DFD }}
           subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_B8E1AD05019E46D8A12CAD012630186C }}
+
+      - name: Set public folder as root
+        run: |
+          echo "WEBSITES_WEB_ROOT=site/wwwroot/public" >> $GITHUB_ENV
 
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v3

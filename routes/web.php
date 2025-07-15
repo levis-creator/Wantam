@@ -1,5 +1,6 @@
 <?php
 
+use App\Livewire\Pages\Catalogue;
 use Illuminate\Support\Facades\Route;
 use Livewire\Volt\Volt;
 
@@ -11,7 +12,7 @@ Route::view('/', 'pages.home')->name('home');
 Route::view('dashboard', 'pages.dashboard')
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
-
+Volt::route('/catalogue', 'pages.catalogue')->name('catalogue');
 Route::middleware(['auth'])->group(function () {
     Route::redirect('settings', 'settings/profile');
 

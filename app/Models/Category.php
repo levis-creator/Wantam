@@ -135,4 +135,8 @@ class Category extends Model
     {
         return $query->whereNull('parent_id');
     }
+    public function products()
+    {
+        return $this->hasMany(Product::class);
+    }
 }

@@ -96,3 +96,10 @@ jobs:
           app-name: "wantam"
           slot-name: "Production"
           package: .
+
+      - name: Run Laravel Migrations
+        uses: azure/webapps-deploy@v3
+        with:
+          app-name: "wantam"
+          slot-name: "Production"
+          run-command: "php artisan migrate --force"

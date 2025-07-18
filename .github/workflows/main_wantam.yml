@@ -1,7 +1,7 @@
 # Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
 # More GitHub Actions for Azure: https://github.com/Azure/actions
 
-name: Build and deploy PHP app to Azure Web App - wantam
+name: Build and deploy Laravel app to Azure Web App - wantam
 
 on:
   push:
@@ -13,7 +13,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     permissions:
-      contents: read #This is required for actions/checkout
+      contents: read
 
     steps:
       - uses: actions/checkout@v4
@@ -22,6 +22,8 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: "8.3"
+          extensions: mbstring, bcmath, intl, zip, curl, pdo, mysql
+          tools: composer
 
       - name: Check if composer.json exists
         id: check_files
@@ -29,12 +31,28 @@ jobs:
         with:
           files: "composer.json"
 
-      - name: Run composer install if composer.json exists
+      - name: Install PHP Dependencies
         if: steps.check_files.outputs.files_exists == 'true'
-        run: composer validate --no-check-publish && composer install --prefer-dist --no-progress
+        run: composer install --no-dev --optimize-autoloader
 
-      - name: Zip artifact for deployment
-        run: zip release.zip ./* -r
+      - name: Copy .env if missing
+        run: php -r "file_exists('.env') || copy('.env.example', '.env');"
+
+      - name: Generate Laravel App Key
+        run: php artisan key:generate
+
+      - name: Set folder permissions
+        run: chmod -R 775 storage bootstrap/cache
+
+      - name: Make startup.sh executable (if exists)
+        run: |
+          if [ -f startup.sh ]; then
+            chmod +x startup.sh
+          fi
+
+      - name: Zip artifact for deployment (excluding dev files)
+        run: |
+          zip -r release.zip . -x ".git/*" "node_modules/*" "tests/*" ".github/*"
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
@@ -46,8 +64,8 @@ jobs:
     runs-on: ubuntu-latest
     needs: build
     permissions:
-      id-token: write #This is required for requesting the JWT
-      contents: read #This is required for actions/checkout
+      id-token: write
+      contents: read
 
     steps:
       - name: Download artifact from build job
@@ -64,10 +82,11 @@ jobs:
           client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_609D6B137A864817B48035A7D9CED116 }}
           tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_BB820D52E82D4E4D93EA495D9C396D39 }}
           subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_A725286B079F455AB9E1C7963E294106 }}
-      - name: Copy .env
+
+      - name: Copy .env if missing
         run: php -r "file_exists('.env') || copy('.env.example', '.env');"
 
-      - name: "Deploy to Azure Web App"
+      - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v3
         id: deploy-to-webapp
         with:

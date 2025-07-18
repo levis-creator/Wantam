@@ -1,6 +1,7 @@
 <?php
 
 use App\Livewire\Pages\Catalogue;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
 use Livewire\Volt\Volt;
 
@@ -20,5 +21,11 @@ Route::middleware(['auth'])->group(function () {
     Volt::route('settings/password', 'settings.password')->name('settings.password');
     Volt::route('settings/appearance', 'settings.appearance')->name('settings.appearance');
 });
-
+Route::get('/artisan-migrate', function () {
+    if (app()->environment('production')) {
+        Artisan::call('migrate', ['--force' => true]);
+        return 'Migrations executed.';
+    }
+    abort(403);
+});
 require __DIR__ . '/auth.php';

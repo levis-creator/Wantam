@@ -1,21 +1,28 @@
 #!/bin/bash
 
-# Install missing PHP extensions for Laravel
-apt-get update && \
-apt-get install -y php-intl php-zip
+# Install any missing PHP extensions (optional on Azure, can be skipped if already present)
+apt-get update && apt-get install -y php-intl php-zip
 
-# Move into the Laravel project root
-cd /home/site/wwwroot
+# Navigate to the Laravel project root (Azure sets this as /home/site/wwwroot)
+cd /home/site/wwwroot || exit
 
-# Laravel cache & migration setup
-echo "Running Laravel config cache..."
+# Ensure proper permissions for storage and cache
+echo "Setting correct permissions..."
+chmod -R 775 storage bootstrap/cache
+chown -R www-data:www-data storage bootstrap/cache
+
+# Laravel optimization and caching
+echo "Caching Laravel configuration..."
 php artisan config:cache
 
-echo "Running Laravel route cache..."
+echo "Caching Laravel routes..."
 php artisan route:cache
 
+echo "Caching Laravel views..."
+php artisan view:cache
+
+# Run database migrations
 echo "Running Laravel migrations..."
 php artisan migrate --force
 
-# Important: Do NOT start NGINX or PHP-FPM manually — Azure manages that
 echo "Startup script completed."

@@ -36,10 +36,7 @@ jobs:
           chmod -R 775 storage bootstrap/cache
 
       - name: ⚙️ Make startup.sh executable
-        run: |
-          if [ -f startup.sh ]; then
-            chmod +x startup.sh
-          fi
+        run: chmod +x startup.sh
 
       - name: 📦 Zip Artifact for Deployment
         run: |

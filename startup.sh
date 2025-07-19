@@ -18,3 +18,4 @@ echo "🛠 Running Laravel database migrations..."
 php artisan migrate --force
 
 echo "✅ Startup script completed."
+

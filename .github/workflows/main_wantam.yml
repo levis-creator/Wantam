@@ -1,4 +1,7 @@
-name: Build and deploy Laravel app to Azure Web App - wantam
+# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
+# More GitHub Actions for Azure: https://github.com/Azure/actions
+
+name: Build and deploy PHP app to Azure Web App - wantam
 
 on:
   push:
@@ -10,39 +13,30 @@ jobs:
   build:
     runs-on: ubuntu-latest
     permissions:
-      contents: read
+      contents: read #This is required for actions/checkout
 
     steps:
-      - name: ⬇️ Checkout code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: ⚙️ Setup PHP
+      - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: "8.3"
-          extensions: mbstring, bcmath, intl, zip, curl, pdo, mysql
-          tools: composer
+          php-version: '8.3'
 
-      - name: 📦 Install PHP Dependencies
-        run: composer install --no-dev --optimize-autoloader
+      - name: Check if composer.json exists
+        id: check_files
+        uses: andstor/file-existence-action@v1
+        with:
+          files: 'composer.json'
 
-      - name: ⚙️ Laravel App Setup
-        run: |
-          cp .env.example .env
-          php artisan key:generate
-          php artisan config:cache
-          php artisan route:cache
-          php artisan view:cache
-          chmod -R 775 storage bootstrap/cache
+      - name: Run composer install if composer.json exists
+        if: steps.check_files.outputs.files_exists == 'true'
+        run: composer validate --no-check-publish && composer install --prefer-dist --no-progress
 
-      - name: ⚙️ Make startup.sh executable
-        run: chmod +x startup.sh
+      - name: Zip artifact for deployment
+        run: zip release.zip ./* -r
 
-      - name: 📦 Zip Artifact for Deployment
-        run: |
-          zip -r release.zip . -x ".git/*" "node_modules/*" "tests/*" ".github/*"
-
-      - name: ☁️ Upload Artifact
+      - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
           name: php-app
@@ -52,28 +46,30 @@ jobs:
     runs-on: ubuntu-latest
     needs: build
     permissions:
-      id-token: write
-      contents: read
+      id-token: write #This is required for requesting the JWT
+      contents: read #This is required for actions/checkout
 
     steps:
-      - name: 📥 Download Artifact
+      - name: Download artifact from build job
         uses: actions/download-artifact@v4
         with:
           name: php-app
 
-      - name: 📂 Unzip Artifact
+      - name: Unzip artifact for deployment
         run: unzip release.zip
-
-      - name: 🔐 Login to Azure
+      
+      - name: Login to Azure
         uses: azure/login@v2
         with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_609D6B137A864817B48035A7D9CED116 }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_BB820D52E82D4E4D93EA495D9C396D39 }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_A725286B079F455AB9E1C7963E294106 }}
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_C511CC4626A04D0D9BD54F53A689D4A4 }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_B05891039AD0481C81AF702C2B0E5767 }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_656E8936451E4C4A9F6A1A2D7DCB676F }}
 
-      - name: 🚀 Deploy to Azure Web App
+      - name: 'Deploy to Azure Web App'
         uses: azure/webapps-deploy@v3
+        id: deploy-to-webapp
         with:
-          app-name: "wantam"
-          slot-name: "Production"
+          app-name: 'wantam'
+          slot-name: 'Production'
           package: .
+          

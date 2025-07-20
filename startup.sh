@@ -5,9 +5,12 @@ set -e
 apt-get update && apt-get install -y unzip curl git
 
 cd /home/site/wwwroot
-# nginx config
+
+# ✅ nginx config
 echo "⚙ Configuring nginx..."
 cp /home/site/wwwroot/default /etc/nginx/sites-enabled
+# ✅ remove default
+rm hostingstart.html
 
 # ✅ Install Composer globally
 if ! command -v composer &>/dev/null; then

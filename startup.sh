@@ -9,6 +9,7 @@ cd /home/site/wwwroot
 # ✅ nginx config
 echo "⚙ Configuring nginx..."
 cp /home/site/wwwroot/default /etc/nginx/sites-enabled
+service nginx restart
 # ✅ remove default
 rm hostingstart.html
 

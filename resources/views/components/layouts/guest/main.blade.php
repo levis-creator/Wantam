@@ -4,7 +4,6 @@
 
 <head>
     @include('partials.head')
-    @fluxAppearance
 </head>
 
 <body class="bg-slate-50 dark:bg-zinc-800">

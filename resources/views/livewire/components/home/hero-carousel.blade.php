@@ -12,8 +12,12 @@ new class extends Component {
             ->whereNotNull('image')
             ->orderBy('starts_at', 'desc')
             ->take(5)
-            ->select('id', 'title', 'image', 'link') // add 'description' if it exists
-            ->get();
+            ->select('id', 'title', 'image', 'link', 'description')
+            ->get()
+            ->map(function ($slide) {
+                $slide->image = secure_asset('storage/' . $slide->image);
+                return $slide;
+            });
     }
 };
 ?>
@@ -28,9 +32,14 @@ new class extends Component {
         setInterval(() => this.next(), 6000);
     }
 }" x-init="init" class="relative w-full h-full rounded-lg overflow-hidden">
+
     {{-- Slides --}}
     <template x-for="(slide, index) in slides" :key="slide.id">
-        <div x-show="activeSlide === index" x-transition class="absolute inset-0 w-full h-full">
+        <div x-show="activeSlide === index" x-transition:enter="transition ease-out duration-500"
+            x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
+            x-transition:leave="transition ease-in duration-300" x-transition:leave-start="opacity-100"
+            x-transition:leave-end="opacity-0" class="absolute inset-0 w-full h-full">
+
             <img :src="slide.image" :alt="slide.title" class="w-full h-full object-cover">
 
             <div
@@ -47,7 +56,7 @@ new class extends Component {
         </div>
     </template>
 
-    {{-- Controls --}}
+    {{-- Navigation Controls --}}
     <button @click="prev"
         class="absolute left-0 top-1/2 -translate-y-1/2 bg-black/40 text-white px-3 py-2 rounded-r hover:bg-black/70 z-10">
         ‹

@@ -11,7 +11,7 @@ new class extends Component {
     class="block bg-white overflow-hidden dark:bg-zinc-800 rounded-xl shadow transition-all duration-300 group hover:shadow-2xl hover:-translate-y-1">
     <div class="relative aspect-[4/3] w-full overflow-hidden">
         @if (isset($product['main_image']))
-            <img src="{{ asset('storage/' . $product['main_image']) }}" alt="{{ $product['name'] ?? '' }}"
+            <img src="{{ secure_asset('storage/' . $product['main_image']) }}" alt="{{ $product['name'] ?? '' }}"
                 class="w-full h-full object-cover transform transition-transform duration-300 group-hover:scale-105">
         @else
             <div class="w-full h-full bg-zinc-300 flex items-center justify-center text-sm text-zinc-600">

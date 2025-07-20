@@ -5,6 +5,8 @@ set -e
 apt-get update && apt-get install -y unzip curl git
 
 cd /home/site/wwwroot
+# nginx config
+cp /home/site/wwwroot/default /etc/nginx/sites-enabled
 
 # ✅ Install Composer globally
 if ! command -v composer &>/dev/null; then

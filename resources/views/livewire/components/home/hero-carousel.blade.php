@@ -15,13 +15,15 @@ new class extends Component {
             ->select('id', 'title', 'image', 'link', 'description')
             ->get()
             ->map(function ($slide) {
-                $slide->image = secure_asset('storage/' . $slide->image);
+                // Use asset() instead of secure_asset() for local dev
+                $slide->image = app()->environment('production')
+                    ? secure_asset('storage/' . $slide->image)
+                    : asset('storage/' . $slide->image);
                 return $slide;
             });
     }
 };
 ?>
-
 
 <div x-data="{
     slides: @js($slides),

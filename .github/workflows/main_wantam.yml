@@ -33,6 +33,7 @@ jobs:
 
       - name: Install Node dependencies and build assets
         run: |
+          npm i
           npm ci
           npm run build
 

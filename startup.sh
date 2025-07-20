@@ -2,7 +2,7 @@
 set -e
 
 # ✅ Install required PHP extensions
-apt-get update && apt-get install -y php-mysql php-intl php-zip unzip curl git
+apt-get update && apt-get install -y unzip curl git
 
 cd /home/site/wwwroot
 

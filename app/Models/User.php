@@ -22,11 +22,12 @@ is defining a class named `User` that extends the `Authenticatable` class and im
 the `Authenticatable` class and also must implement the methods defined in the `FilamentUser`
 interface. This allows the `User` class to have authentication-related functionality provided by
 `Authenticatable` and any additional behavior specified by the `FilamentUser` interface. */
+
 class User extends Authenticatable implements FilamentUser
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use  HasFactory, Notifiable, SoftDeletes, HasUuids;
-public const ROLE_USER = 'user';
+    public const ROLE_USER = 'user';
     public const ROLE_ADMIN = 'admin';
 
     /**
@@ -65,7 +66,7 @@ public const ROLE_USER = 'user';
             'password' => 'hashed',
         ];
     }
-     /**
+    /**
      * Required by FilamentUser interface
      * Determine if the user can access the Filament admin panel
      */
@@ -86,7 +87,7 @@ public const ROLE_USER = 'user';
     /**
      * Get the user's full name
      */
-   public function getFullNameAttribute(): string
+    public function getFullNameAttribute(): string
     {
         return trim("{$this->first_name} {$this->last_name}") ?: '';
     }
@@ -98,7 +99,7 @@ public const ROLE_USER = 'user';
         return Str::of($this->full_name)
             ->explode(' ')
             ->take(2)
-            ->map(fn ($word) => Str::upper(Str::substr($word, 0, 1)))
+            ->map(fn($word) => Str::upper(Str::substr($word, 0, 1)))
             ->implode('');
     }
     public function getNameAttribute(): string

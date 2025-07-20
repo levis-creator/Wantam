@@ -12,6 +12,8 @@
         {{ $slot }}
     </main>
     <x-layouts.guest.footer />
+
+    @livewireScripts
     @fluxScripts
 </body>
 

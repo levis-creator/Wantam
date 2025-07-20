@@ -37,7 +37,6 @@ fi
 # ✅ Run Node asset build if package.json exists
 if [ -f "package.json" ]; then
   echo "📦 Installing Node dependencies..."
-  npm install
   npm ci
   echo "🔨 Building frontend assets..."
   npm run build

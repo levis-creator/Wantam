@@ -12,21 +12,20 @@ class Category extends Model
     use HasFactory, HasUuids;
 
     /**
-     * Indicates if the IDs are auto-incrementing.
+     * Indicates if the model's ID is auto-incrementing.
      */
     public $incrementing = false;
 
     /**
-     * The data type of the primary key.
+     * The type of the model's primary key.
      */
     protected $keyType = 'string';
 
     /**
-     * Mass assignable attributes.
-     *
-     * @var array<string>
+     * The attributes that are mass assignable.
      */
     protected $fillable = [
+        'id',
         'name',
         'slug',
         'description',
@@ -36,23 +35,14 @@ class Category extends Model
     ];
 
     /**
-     * Attribute type casting.
-     *
-     * @var array<string, string>
+     * The attributes that should be cast.
      */
     protected $casts = [
         'is_active' => 'boolean',
     ];
 
     /**
-     * Eager-load children automatically if needed.
-     *
-     * (Uncomment if you commonly access children)
-     */
-    // protected $with = ['children'];
-
-    /**
-     * Self-referencing parent relationship.
+     * Get the parent category (if any).
      */
     public function parent()
     {
@@ -60,7 +50,7 @@ class Category extends Model
     }
 
     /**
-     * Self-referencing children relationship.
+     * Get all children categories.
      */
     public function children()
     {
@@ -68,15 +58,7 @@ class Category extends Model
     }
 
     /**
-     * Use slug for route model binding.
-     */
-    public function getRouteKeyName(): string
-    {
-        return 'slug';
-    }
-
-    /**
-     * Accessor for full image URL.
+     * Get the full URL of the category image.
      */
     public function getImageUrlAttribute(): ?string
     {
@@ -84,7 +66,7 @@ class Category extends Model
     }
 
     /**
-     * Scope for active categories.
+     * Scope a query to only include active categories.
      */
     public function scopeActive($query)
     {
@@ -92,7 +74,7 @@ class Category extends Model
     }
 
     /**
-     * Scope for inactive categories.
+     * Scope a query to only include inactive categories.
      */
     public function scopeInactive($query)
     {
@@ -100,43 +82,75 @@ class Category extends Model
     }
 
     /**
-     * Boot method to auto-generate slugs on create/update.
+     * Scope to get only top-level categories (no parent).
+     */
+    public function scopeParents($query)
+    {
+        return $query->whereNull('parent_id');
+    }
+
+    /**
+     * Get all products under this category.
+     */
+    public function products()
+    {
+        return $this->hasMany(Product::class);
+    }
+
+    /**
+     * Use the slug instead of the ID in route model binding.
+     */
+    public function getRouteKeyName(): string
+    {
+        return 'slug';
+    }
+
+    /**
+     * Boot method to generate slug and UUID on create/update.
      */
     protected static function booted(): void
     {
         static::creating(function (self $category) {
-            $category->slug = self::generateSlug($category->name, $category->parent_id);
+            if (empty($category->id)) {
+                $category->id = (string) Str::uuid();
+            }
+
+            if (empty($category->slug)) {
+                $category->slug = self::generateSlug($category->name, $category->parent_id);
+            }
         });
 
         static::updating(function (self $category) {
             if ($category->isDirty('name') || $category->isDirty('parent_id')) {
-                $category->slug = self::generateSlug($category->name, $category->parent_id);
+                $category->slug = self::generateSlug($category->name, $category->parent_id, $category->id);
             }
         });
     }
 
     /**
-     * Generate slug including parent prefix if applicable.
+     * Generate a unique slug based on name and parent category.
      */
-    protected static function generateSlug(string $name, ?string $parentId): string
+    protected static function generateSlug(string $name, ?string $parentId, ?string $currentId = null): string
     {
         $baseSlug = Str::slug($name);
 
         if ($parentId) {
             $parent = self::find($parentId);
             if ($parent) {
-                return $parent->slug . '-' . $baseSlug;
+                $baseSlug = $parent->slug . '-' . $baseSlug;
             }
         }
 
-        return $baseSlug;
-    }
-    public function scopeParents($query)
-    {
-        return $query->whereNull('parent_id');
-    }
-    public function products()
-    {
-        return $this->hasMany(Product::class);
+        $slug = $baseSlug;
+        $i = 1;
+
+        while (self::where('slug', $slug)
+            ->when($currentId, fn($query) => $query->where('id', '!=', $currentId))
+            ->exists()
+        ) {
+            $slug = $baseSlug . '-' . $i++;
+        }
+
+        return $slug;
     }
 }

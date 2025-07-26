@@ -10,17 +10,30 @@ class OrderItem extends Model
 {
     use HasFactory, HasUuids;
 
+    /**
+     * Indicates if the model's ID is auto-incrementing.
+     */
     public $incrementing = false;
+
+    /**
+     * The primary key type.
+     */
     protected $keyType = 'string';
 
+    /**
+     * Mass assignable attributes.
+     */
     protected $fillable = [
         'order_id',
         'product_id',
-        'inventory_id', // Optional: links to inventory variant like size
+        'product_variant_id', // updated from inventory_id for better clarity
         'price',
         'quantity',
     ];
 
+    /**
+     * Attribute type casting.
+     */
     protected $casts = [
         'price' => 'float',
         'quantity' => 'integer',
@@ -42,9 +55,16 @@ class OrderItem extends Model
         return $this->belongsTo(Product::class);
     }
 
+    /**
+     * Relationship: Belongs to a Product Variant (size/color).
+     */
+    public function productVariant()
+    {
+        return $this->belongsTo(ProductVariant::class);
+    }
 
     /**
-     * Accessor: Total cost for this item (price * quantity).
+     * Accessor: Get the total cost for this item (price * quantity).
      */
     public function getTotalCostAttribute(): float
     {

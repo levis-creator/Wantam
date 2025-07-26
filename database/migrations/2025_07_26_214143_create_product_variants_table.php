@@ -12,7 +12,16 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('product_variants', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id')->primary();
+            $table->foreignUuid('product_id')->constrained()->cascadeOnDelete();
+            $table->foreignUuid('size_id')->nullable()->constrained()->nullOnDelete();
+            $table->foreignUuid('color_id')->nullable()->constrained()->nullOnDelete();
+
+            $table->string('sku')->nullable()->unique();
+            $table->decimal('price', 10, 2)->nullable(); // Optional price override
+            $table->integer('stock')->default(0);
+            $table->boolean('is_active')->default(true);
+
             $table->timestamps();
         });
     }

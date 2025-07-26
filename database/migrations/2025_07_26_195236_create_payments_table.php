@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('payment_method'); // e.g. 'mpesa', 'card', 'paypal'
             $table->string('transaction_id')->nullable();
             $table->decimal('amount', 10, 2);
-            $table->enum('status', ['pending', 'completed', 'failed'])->default('pending');
+            $table->string('status')->default('pending'); // cast to PaymentStatus enum in model
             $table->timestamps();
         });
     }

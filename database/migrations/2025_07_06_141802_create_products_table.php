@@ -33,7 +33,6 @@ return new class extends Migration
             $table->decimal('price', 10, 2); // final price after discount
 
             // Stock & status
-            $table->integer('stock_quantity')->default(0);
             $table->boolean('is_active')->default(true)->index();
             $table->boolean('is_featured')->default(false)->index();
 

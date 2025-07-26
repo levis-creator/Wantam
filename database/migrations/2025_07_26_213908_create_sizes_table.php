@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('sizes', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('name'); // e.g. "8", "9.5", "XL"
-            $table->string('label')->nullable(); // Optional: "US 9", "EU 42"
+            $table->string('label')->nullable(); // e.g. "US 9", "EU 42"
             $table->timestamps();
         });
     }

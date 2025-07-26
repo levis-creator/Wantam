@@ -25,6 +25,7 @@ class Product extends Model
     /**
      * The attributes that are mass assignable.
      */
+    // Remove 'stock_quantity' from fillable
     protected $fillable = [
         'id',
         'category_id',
@@ -37,18 +38,19 @@ class Product extends Model
         'original_price',
         'discount',
         'price',
-        'stock_quantity',
         'is_active',
         'is_featured',
         'rating',
     ];
 
+
+
     /**
      * The attributes that should be cast to native types.
      */
+
     protected $casts = [
         'images' => 'array',
-        'stock_quantity' => 'integer',
         'original_price' => 'float',
         'discount' => 'float',
         'price' => 'float',
@@ -129,7 +131,11 @@ class Product extends Model
      */
     public function getInStockAttribute(): bool
     {
-        return $this->stock_quantity > 0;
+        return $this->variants()->where('stock', '>', 0)->exists();
+    }
+    public function getTotalStockAttribute(): int
+    {
+        return $this->variants()->sum('stock');
     }
 
     // ====================
@@ -158,6 +164,13 @@ class Product extends Model
     public function reviews()
     {
         return $this->hasMany(Review::class);
+    }
+    /**
+     * Get all variants for this product.
+     */
+    public function variants()
+    {
+        return $this->hasMany(ProductVariant::class);
     }
 
     // ====================

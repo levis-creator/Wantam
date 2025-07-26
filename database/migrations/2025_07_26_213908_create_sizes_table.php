@@ -11,10 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('colors', function (Blueprint $table) {
+        Schema::create('sizes', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->string('name'); // e.g. "Red", "Black"
-            $table->string('hex')->nullable(); // e.g. "#FF0000"
+            $table->string('name'); // e.g. "8", "9.5", "XL"
+            $table->string('label')->nullable(); // Optional: "US 9", "EU 42"
             $table->timestamps();
         });
     }
@@ -24,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('colors');
+        Schema::dropIfExists('sizes');
     }
 };

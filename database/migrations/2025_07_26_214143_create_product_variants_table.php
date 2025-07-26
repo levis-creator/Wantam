@@ -11,10 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('colors', function (Blueprint $table) {
-            $table->uuid('id')->primary();
-            $table->string('name'); // e.g. "Red", "Black"
-            $table->string('hex')->nullable(); // e.g. "#FF0000"
+        Schema::create('product_variants', function (Blueprint $table) {
+            $table->id();
             $table->timestamps();
         });
     }
@@ -24,6 +22,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('colors');
+        Schema::dropIfExists('product_variants');
     }
 };

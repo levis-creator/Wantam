@@ -160,13 +160,6 @@ class Product extends Model
         return $this->hasMany(Review::class);
     }
 
-    /**
-     * Get all inventories where this product is featured.
-     */
-    public function inventories()
-    {
-        return $this->hasMany(Inventory::class);
-    }
     // ====================
     // Query Scopes
     // ====================

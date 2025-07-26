@@ -42,13 +42,6 @@ class OrderItem extends Model
         return $this->belongsTo(Product::class);
     }
 
-    /**
-     * Relationship: Belongs to Inventory (e.g., size).
-     */
-    public function inventory()
-    {
-        return $this->belongsTo(Inventory::class);
-    }
 
     /**
      * Accessor: Total cost for this item (price * quantity).

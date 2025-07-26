@@ -16,29 +16,31 @@ return new class extends Migration
         Schema::create('products', function (Blueprint $table) {
             $table->uuid('id')->primary();
 
+            // Foreign keys
             $table->foreignIdFor(Category::class)->constrained()->cascadeOnDelete();
             $table->foreignIdFor(Brand::class)->constrained()->cascadeOnDelete();
 
+            // Product details
             $table->string('name');
             $table->string('slug')->unique();
-            $table->string('main_image');
-            $table->json('images')->nullable();
+            $table->string('main_image'); // thumbnail / cover image
+            $table->json('images')->nullable(); // gallery images
             $table->longText('description')->nullable();
 
-            // Price-related fields
+            // Pricing
             $table->decimal('original_price', 10, 2)->nullable();
-            $table->decimal('discount', 5, 2)->nullable(); // Percentage: e.g. 20.00 means 20%
+            $table->decimal('discount', 5, 2)->nullable(); // percentage (e.g. 15.00 = 15%)
             $table->decimal('price', 10, 2); // final price after discount
 
+            // Stock & status
             $table->integer('stock_quantity')->default(0);
-
-            // Product status
             $table->boolean('is_active')->default(true)->index();
             $table->boolean('is_featured')->default(false)->index();
 
             // Ratings (optional)
-            $table->decimal('rating', 2, 1)->nullable(); // e.g. 4.5 out of 5
+            $table->decimal('rating', 2, 1)->nullable(); // average rating: e.g. 4.5
 
+            // Soft deletes and timestamps
             $table->softDeletes();
             $table->timestamps();
         });

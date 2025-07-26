@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('advertisements', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('title')->nullable();
-            $table->string('image'); // banner image
+            $table->string('image'); // banner image path
             $table->string('link')->nullable(); // redirect on click
             $table->foreignUuid('product_id')->nullable()->constrained()->nullOnDelete();
             $table->timestamp('starts_at')->nullable();
@@ -29,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('advertisement');
+        Schema::dropIfExists('advertisements');
     }
 };

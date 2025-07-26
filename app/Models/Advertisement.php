@@ -32,7 +32,6 @@ class Advertisement extends Model
      * @var array<string, string>
      */
     protected $casts = [
-        'id' => 'string', // Since it's UUID
         'starts_at' => 'datetime',
         'ends_at' => 'datetime',
         'is_active' => 'boolean',

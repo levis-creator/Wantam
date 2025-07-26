@@ -11,16 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('order_items', function (Blueprint $table) {
+        Schema::create('shippings', function (Blueprint $table) {
             $table->uuid('id')->primary();
-
             $table->foreignUuid('order_id')->constrained()->cascadeOnDelete();
-            $table->foreignUuid('product_id')->constrained()->cascadeOnDelete();
-            $table->foreignUuid('inventory_id')->nullable()->constrained()->nullOnDelete();
-
-            $table->decimal('price', 10, 2);
-            $table->integer('quantity');
-
+            $table->string('address');
+            $table->string('city');
+            $table->string('postal_code');
+            $table->string('country');
+            $table->string('tracking_number')->nullable();
+            $table->enum('status', ['pending', 'shipped', 'delivered'])->default('pending');
             $table->timestamps();
         });
     }
@@ -30,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('order_items');
+        Schema::dropIfExists('shippings');
     }
 };

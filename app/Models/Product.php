@@ -161,13 +161,12 @@ class Product extends Model
     }
 
     /**
-     * Get all advertisements where this product is featured.
+     * Get all inventories where this product is featured.
      */
-    public function advertisements()
+    public function inventories()
     {
-        return $this->hasMany(Advertisement::class);
+        return $this->hasMany(Inventory::class);
     }
-
     // ====================
     // Query Scopes
     // ====================

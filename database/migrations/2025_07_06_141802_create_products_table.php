@@ -30,8 +30,7 @@ return new class extends Migration
             // Pricing
             $table->decimal('original_price', 10, 2)->nullable();
             $table->decimal('discount', 5, 2)->nullable(); // percentage (e.g. 15.00 = 15%)
-            $table->decimal('price', 10, 2); // final price after discount
-
+            $table->decimal('price', 10, 2)->default(0);
             // Stock & status
             $table->boolean('is_active')->default(true)->index();
             $table->boolean('is_featured')->default(false)->index();

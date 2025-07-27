@@ -12,20 +12,9 @@ class Product extends Model
 {
     use HasFactory, SoftDeletes, HasUuids;
 
-    /**
-     * Indicates that the primary key is not auto-incrementing.
-     */
     public $incrementing = false;
-
-    /**
-     * Indicates the type of the primary key.
-     */
     protected $keyType = 'string';
 
-    /**
-     * The attributes that are mass assignable.
-     */
-    // Remove 'stock_quantity' from fillable
     protected $fillable = [
         'id',
         'category_id',
@@ -43,12 +32,6 @@ class Product extends Model
         'rating',
     ];
 
-
-
-    /**
-     * The attributes that should be cast to native types.
-     */
-
     protected $casts = [
         'images' => 'array',
         'original_price' => 'float',
@@ -59,31 +42,29 @@ class Product extends Model
         'is_featured' => 'boolean',
     ];
 
-    /**
-     * The "booted" method of the model to handle events.
-     */
+    protected $appends = [
+        'main_image_url',
+        'images_urls',
+        'in_stock',
+        'total_stock',
+    ];
+
     protected static function booted(): void
     {
-        // When creating a new product
         static::creating(function (Product $product) {
-            $product->generateId();            // Set UUID if not provided
-            $product->generateSlug();          // Auto-generate unique slug
-            $product->calculateDiscountedPrice(); // Calculate final price after discount
+            $product->generateId();
+            $product->generateSlug();
+            $product->calculateDiscountedPrice();
         });
 
-        // When updating an existing product
         static::updating(function (Product $product) {
             if ($product->isDirty('name')) {
-                $product->generateSlug(); // Regenerate slug if name changes
+                $product->generateSlug();
             }
-
-            $product->calculateDiscountedPrice(); // Recalculate price
+            $product->calculateDiscountedPrice();
         });
     }
 
-    /**
-     * Generate UUID for the product if it's not already set.
-     */
     protected function generateId(): void
     {
         if (empty($this->id)) {
@@ -91,9 +72,6 @@ class Product extends Model
         }
     }
 
-    /**
-     * Generate a unique slug from the product name.
-     */
     protected function generateSlug(): void
     {
         $baseSlug = Str::slug($this->name);
@@ -101,7 +79,6 @@ class Product extends Model
         $originalSlug = $slug;
         $i = 1;
 
-        // Ensure uniqueness of the slug
         while (
             static::where('slug', $slug)
             ->where('id', '!=', $this->id)
@@ -113,9 +90,6 @@ class Product extends Model
         $this->slug = $slug;
     }
 
-    /**
-     * Calculate final price after applying discount.
-     */
     protected function calculateDiscountedPrice(): void
     {
         if ($this->original_price && $this->discount) {
@@ -126,13 +100,32 @@ class Product extends Model
         }
     }
 
-    /**
-     * Accessor: Check if the product is in stock.
-     */
+    // ========================
+    // Accessors (Laravel 12 style using asset())
+    // ========================
+
+    public function getMainImageUrlAttribute(): ?string
+    {
+        return $this->main_image
+            ? asset('storage/' . ltrim($this->main_image, '/'))
+            : null;
+    }
+
+    public function getImagesUrlsAttribute(): array
+    {
+        return is_array($this->images)
+            ? collect($this->images)
+            ->filter()
+            ->map(fn($image) => asset('storage/' . ltrim($image, '/')))
+            ->toArray()
+            : [];
+    }
+
     public function getInStockAttribute(): bool
     {
         return $this->variants()->where('stock', '>', 0)->exists();
     }
+
     public function getTotalStockAttribute(): int
     {
         return $this->variants()->sum('stock');
@@ -142,52 +135,35 @@ class Product extends Model
     // Relationships
     // ====================
 
-    /**
-     * Get the category this product belongs to.
-     */
     public function category()
     {
         return $this->belongsTo(Category::class);
     }
 
-    /**
-     * Get the brand this product belongs to.
-     */
     public function brand()
     {
         return $this->belongsTo(Brand::class);
     }
 
-    /**
-     * Get all reviews associated with this product.
-     */
     public function reviews()
     {
         return $this->hasMany(Review::class);
     }
-    /**
-     * Get all variants for this product.
-     */
+
     public function variants()
     {
         return $this->hasMany(ProductVariant::class);
     }
 
     // ====================
-    // Query Scopes
+    // Scopes
     // ====================
 
-    /**
-     * Scope: Filter only active products.
-     */
     public function scopeActive($query)
     {
         return $query->where('is_active', true);
     }
 
-    /**
-     * Scope: Filter featured and active products.
-     */
     public function scopeFeatured($query)
     {
         return $query->where('is_featured', true)->where('is_active', true);

@@ -13,8 +13,7 @@ class Size extends Model
     public $incrementing = false;
     protected $keyType = 'string';
 
-    protected $fillable = ['label'];
-
+    protected $fillable = ['label', 'name'];
     public function variants()
     {
         return $this->hasMany(ProductVariant::class);

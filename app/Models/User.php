@@ -2,8 +2,6 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
-
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Panel;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
@@ -13,20 +11,11 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Str;
 
-/* The `class User extends Authenticatable implements FilamentUser` statement in the PHP code snippet
-is defining a class named `User` that extends `Authenticatable` class and implements the
-`FilamentUser` interface. */
-/* The `class User extends Authenticatable implements FilamentUser` statement in the PHP code snippet
-is defining a class named `User` that extends the `Authenticatable` class and implements the
-`FilamentUser` interface. This means that the `User` class inherits the properties and methods of
-the `Authenticatable` class and also must implement the methods defined in the `FilamentUser`
-interface. This allows the `User` class to have authentication-related functionality provided by
-`Authenticatable` and any additional behavior specified by the `FilamentUser` interface. */
-
 class User extends Authenticatable implements FilamentUser
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use  HasFactory, Notifiable, SoftDeletes, HasUuids;
+    use HasFactory, Notifiable, SoftDeletes, HasUuids;
+
     public const ROLE_USER = 'user';
     public const ROLE_ADMIN = 'admin';
 
@@ -66,6 +55,7 @@ class User extends Authenticatable implements FilamentUser
             'password' => 'hashed',
         ];
     }
+
     /**
      * Required by FilamentUser interface
      * Determine if the user can access the Filament admin panel
@@ -74,7 +64,6 @@ class User extends Authenticatable implements FilamentUser
     {
         return $this->isAdmin();
     }
-
 
     /**
      * Check if user is an admin
@@ -91,6 +80,7 @@ class User extends Authenticatable implements FilamentUser
     {
         return trim("{$this->first_name} {$this->last_name}") ?: '';
     }
+
     /**
      * Get the user's initials
      */
@@ -102,10 +92,59 @@ class User extends Authenticatable implements FilamentUser
             ->map(fn($word) => Str::upper(Str::substr($word, 0, 1)))
             ->implode('');
     }
+
+    /**
+     * Get the display name for the user
+     */
     public function getNameAttribute(): string
     {
         return $this->getFullNameAttribute()
             ?: $this->email
             ?: 'User-' . Str::substr((string) $this->id, 0, 8);
+    }
+
+    // ====================
+    // Relationships
+    // ====================
+
+    /**
+     * Get all orders for the user
+     */
+    public function orders()
+    {
+        return $this->hasMany(Order::class);
+    }
+
+    /**
+     * Get all payments made by the user via orders
+     * (via orders relationship)
+     */
+    public function payments()
+    {
+        return $this->hasManyThrough(Payment::class, Order::class);
+    }
+
+    /**
+     * Get the cart items for the user
+     */
+    public function cartItems()
+    {
+        return $this->hasMany(Cart::class);
+    }
+
+    /**
+     * Get the wishlist items for the user
+     */
+    public function wishlistItems()
+    {
+        return $this->hasMany(Wishlist::class);
+    }
+
+    /**
+     * Get the reviews written by the user
+     */
+    public function reviews()
+    {
+        return $this->hasMany(Review::class);
     }
 }

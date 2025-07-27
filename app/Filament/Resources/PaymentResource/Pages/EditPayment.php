@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Filament\Resources\CartResource\Pages;
+namespace App\Filament\Resources\PaymentResource\Pages;
 
-use App\Filament\Resources\CartResource;
+use App\Filament\Resources\PaymentResource;
 use Filament\Actions;
 use Filament\Resources\Pages\EditRecord;
 
-class EditCart extends EditRecord
+class EditPayment extends EditRecord
 {
-    protected static string $resource = CartResource::class;
+    protected static string $resource = PaymentResource::class;
 
     protected function getHeaderActions(): array
     {

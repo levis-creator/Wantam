@@ -15,8 +15,7 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->foreignUuid('user_id')->constrained()->cascadeOnDelete();
 
-            $table->decimal('total', 10, 2);
-            $table->enum('status', ['pending', 'paid', 'shipped', 'delivered', 'cancelled'])->default('pending');
+            $table->string('status')->default('pending');
 
             $table->string('payment_method')->nullable(); // e.g. 'mpesa', 'paypal', 'card'
             $table->text('shipping_address')->nullable();

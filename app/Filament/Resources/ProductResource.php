@@ -182,13 +182,14 @@ class ProductResource extends Resource
                 ->icon('heroicon-o-photo')
                 ->schema([
                     Forms\Components\FileUpload::make('main_image')
-                        ->label('Main Image')
-                        ->image()
-                        ->imageEditor()
-                        ->preserveFilenames()
-                        ->directory('products')
-                        ->disk('public')
-                        ->imagePreviewHeight('150')
+                        ->label('Main Image')                    // Display label
+                        ->image()                                // Restrict upload to image types
+                        ->imageEditor()                          // Enable cropping, flipping, rotating, etc.
+                        ->preserveFilenames()                    // Keep original file name (optional for SEO-friendly naming)
+                        ->directory('products/main')             // Store in 'storage/app/public/products/main'
+                        ->disk('public')                         // Use 'public' disk (must be configured in `filesystems.php`)
+                        ->imagePreviewHeight('150')              // Set preview height (good for UI consistency)
+                        ->maxSize(2048)                          // Optional: Limit file size (in KB)
                         ->required(),
 
                     Forms\Components\FileUpload::make('images')

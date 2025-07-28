@@ -20,7 +20,11 @@ class DatabaseSeeder extends Seeder
             CategorySeeder::class,
             BrandSeeder::class,
             ProductSeeder::class,
-            AdvertisementSeeder::class
+            AdvertisementSeeder::class,
+            ColorSeeder::class,
+            SizeSeeder::class,
+            ProductVariantSeeder::class,
+            ReviewSeeder::class
         ]);
     }
 }

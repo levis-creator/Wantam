@@ -11,43 +11,62 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 /**
  * Class Order
  *
- * Represents a customer order in the system.
- * Each order belongs to one user and contains multiple order items.
+ * Represents a customer's order. An order:
+ * - Belongs to a user
+ * - Has many order items (each containing product, quantity, etc.)
+ * - Can have one payment record
+ * - Has a dynamically calculated total (not stored in DB)
  */
 class Order extends Model
 {
     use HasFactory, HasUuids;
 
+    // ================================
+    // Mass assignable fields
+    // ================================
     /**
-     * Indicates the attributes that are mass assignable.
-     * These can be safely assigned via create() or fill().
+     * The attributes that are mass assignable (safe for fill/create).
      *
      * @var array<int, string>
      */
     protected $fillable = [
-        'user_id',           // ID of the user who placed the order
-        'status',            // Enum value: pending, processing, completed, etc.
-        'payment_method',    // Enum: paypal, mpesa, credit_card, etc.
-        'shipping_address',  // Address to ship to
+        'user_id',           // FK: customer who placed the order
+        'status',            // Enum (pending, completed, etc.)
+        'payment_method',    // Enum (paypal, mpesa, etc.)
+        'shipping_address',  // Shipping location
     ];
 
+    // ================================
+    // Casts
+    // ================================
     /**
-     * Casts allow us to transform attributes into appropriate data types or enums.
+     * Cast attributes to their appropriate data types.
      *
      * @var array<string, string>
      */
     protected $casts = [
-        'total' => 'float',
         'status' => OrderStatus::class,
         'payment_method' => PaymentMethod::class,
     ];
+
+    // ================================
+    // Appended Accessors
+    // ================================
+    /**
+     * Dynamically add the "total" attribute to JSON responses.
+     *
+     * @var array<int, string>
+     */
+    protected $appends = ['total'];
 
     // ================================
     // Relationships
     // ================================
 
     /**
-     * Relationship: An order belongs to a user.
+     * Get the user who placed the order.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function user()
     {
@@ -55,8 +74,10 @@ class Order extends Model
     }
 
     /**
-     * Relationship: An order has many items.
-     * Each item includes product/variant and quantity.
+     * Get the order items associated with this order.
+     * Each item contains product/variant info, quantity, and pricing.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function items()
     {
@@ -64,7 +85,9 @@ class Order extends Model
     }
 
     /**
-     * Relationship: An order has one payment record (optional).
+     * Get the payment details associated with the order (if any).
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
      */
     public function payment()
     {
@@ -76,14 +99,17 @@ class Order extends Model
     // ================================
 
     /**
-     * Accessor: Calculate the total cost of the order dynamically.
-     * This sums the total_cost from all related order items.
+     * Dynamically compute the total cost of the order.
+     * Sums the total_cost of each order item.
      *
      * Usage: $order->total
+     *
+     * @return float
      */
     public function getTotalAttribute(): float
     {
-        return $this->items->sum('total_cost'); // each order item must have a total_cost accessor
+        // Assumes each OrderItem has a getTotalCostAttribute()
+        return $this->items->sum('total_cost');
     }
 
     // ================================
@@ -91,9 +117,12 @@ class Order extends Model
     // ================================
 
     /**
-     * Scope: Filter only completed orders.
+     * Scope to retrieve only completed orders.
      *
      * Usage: Order::completed()->get();
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeCompleted($query)
     {

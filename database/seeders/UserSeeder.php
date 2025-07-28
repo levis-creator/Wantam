@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\User;
+use App\Enums\UserRole;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 
@@ -19,7 +20,7 @@ class UserSeeder extends Seeder
             'last_name' => 'User',
             'email' => 'admin@example.com',
             'password' => Hash::make('password123'),
-            'role' => User::ROLE_ADMIN,
+            'role' => UserRole::Admin, // Use enum here
         ]);
 
         // Create test regular user
@@ -28,7 +29,7 @@ class UserSeeder extends Seeder
             'last_name' => 'User',
             'email' => 'user@example.com',
             'password' => Hash::make('password123'),
-            'role' => User::ROLE_USER,
+            'role' => UserRole::User, // Use enum here
         ]);
     }
 }

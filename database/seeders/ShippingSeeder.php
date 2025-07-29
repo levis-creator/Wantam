@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Shipping;
 use Illuminate\Database\Seeder;
 
 class ShippingSeeder extends Seeder
@@ -12,6 +12,7 @@ class ShippingSeeder extends Seeder
      */
     public function run(): void
     {
-        //
+        // Seed 50 shipping records
+        Shipping::factory()->count(50)->create();
     }
 }

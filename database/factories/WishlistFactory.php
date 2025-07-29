@@ -2,22 +2,22 @@
 
 namespace Database\Factories;
 
+use App\Models\User;
+use App\Models\Product;
+use App\Models\Wishlist;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Str;
 
-/**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Wishlist>
- */
 class WishlistFactory extends Factory
 {
-    /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
-     */
+    protected $model = Wishlist::class;
+
     public function definition(): array
     {
         return [
-            //
+            'id' => Str::uuid(),
+            'user_id' => User::inRandomOrder()->first()?->id ?? User::factory(),
+            'product_id' => Product::inRandomOrder()->first()?->id ?? Product::factory(),
         ];
     }
 }

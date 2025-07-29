@@ -14,12 +14,13 @@ return new class extends Migration
         Schema::create('shippings', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->foreignUuid('order_id')->constrained()->cascadeOnDelete();
-            $table->string('address');
+            $table->foreignUuid('address_id')->constrained()->cascadeOnDelete();
+
             $table->string('city');
             $table->string('postal_code');
             $table->string('country');
             $table->string('tracking_number')->nullable();
-            $table->enum('status', ['pending', 'shipped', 'delivered'])->default('pending');
+            $table->string('status')->default('pending');
             $table->timestamps();
         });
     }

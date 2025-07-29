@@ -11,14 +11,19 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('orders', function (Blueprint $table) {
+        Schema::create('addresses', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->foreignUuid('user_id')->constrained()->cascadeOnDelete();
 
-            $table->string('status')->default('pending');
+            $table->string('name')->nullable(); // Recipient name
+            $table->string('phone')->nullable();
 
-            $table->string('payment_method')->nullable(); // e.g. 'mpesa', 'paypal', 'card'
-            $table->foreignUuid('address_id')->nullable()->constrained('addresses')->cascadeOnDelete();
+            $table->string('address');
+            $table->string('city');
+            $table->string('postal_code');
+            $table->string('country');
+
+            $table->boolean('is_default')->default(false); // Default address flag
 
             $table->timestamps();
         });
@@ -29,6 +34,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('orders');
+        Schema::dropIfExists('addresses');
     }
 };

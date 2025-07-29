@@ -18,7 +18,9 @@ use Filament\Tables\Actions\ForceDeleteAction;
 use Filament\Tables\Filters\TrashedFilter;
 use Filament\Tables\Actions\ActionGroup;
 use App\Filament\Resources\UserResource\Pages;
+use App\Filament\Resources\UserResource\RelationManagers\AddressesRelationManager;
 use App\Filament\Resources\UserResource\RelationManagers\CartRelationManager;
+use App\Filament\Resources\UserResource\RelationManagers\OrdersRelationManager;
 use App\Filament\Resources\UserResource\RelationManagers\WishlistRelationManager;
 use Illuminate\Database\Eloquent\Builder;
 
@@ -132,6 +134,8 @@ class UserResource extends Resource
         return [
             CartRelationManager::class,
             WishlistRelationManager::class,
+            OrdersRelationManager::class,
+            AddressesRelationManager::class,
         ];
     }
 

@@ -2,22 +2,33 @@
 
 namespace Database\Factories;
 
+use App\Models\Address;
+use App\Models\Order;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Str;
 
-/**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Order>
- */
 class OrderFactory extends Factory
 {
-    /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
-     */
+    protected $model = Order::class;
+
     public function definition(): array
     {
         return [
-            //
+            'id' => Str::uuid()->toString(),
+            'user_id' => User::factory(),
+
+            // Random status: pending, processing, completed, cancelled
+            'status' => $this->faker->randomElement(['pending', 'processing', 'completed', 'cancelled']),
+
+            // Payment method
+            'payment_method' => $this->faker->randomElement(['mpesa', 'paypal', 'card', 'cash_on_delivery']),
+
+            // Shipping address
+            'address_id' => Address::factory(),
+
+            'created_at' => now(),
+            'updated_at' => now(),
         ];
     }
 }

@@ -38,17 +38,21 @@ class OrderResource extends Resource
 
             Forms\Components\Select::make('status')
                 ->label('Order Status')
-                ->options(OrderStatus::class)
+                ->options(OrderStatus::options())
                 ->required(),
 
             Forms\Components\Select::make('payment_method')
                 ->label('Payment Method')
-                ->options(PaymentMethod::class)
+                ->options(
+                    PaymentMethod::options()
+                )
                 ->required(),
 
-            Forms\Components\Textarea::make('shipping_address')
+            Forms\Components\Select::make('address_id')
                 ->label('Shipping Address')
-                ->rows(3)
+                ->relationship('address', 'address')
+                ->searchable()
+                ->preload()
                 ->required(),
         ]);
     }
@@ -89,6 +93,7 @@ class OrderResource extends Resource
                         PaymentMethod::Card => 'primary',
                         PaymentMethod::PayPal => 'info',
                         PaymentMethod::BankTransfer => 'warning',
+                        PaymentMethod::CashOnDelivery => 'danger',
                         PaymentMethod::Cash => 'gray',
                     })
                     ->formatStateUsing(
@@ -97,14 +102,17 @@ class OrderResource extends Resource
                     )
                     ->sortable(),
 
+                TextColumn::make('address.full_address')
+                    ->label('Shipping Address')
+                    ->wrap()
+                    ->searchable(),
+
                 TextColumn::make('created_at')
                     ->label('Order Date')
                     ->dateTime('M d, Y H:i')
                     ->sortable(),
             ])
-            ->filters([
-                // Add filters like by status, customer, or date range if needed
-            ])
+            ->filters([])
             ->actions([
                 EditAction::make(),
                 DeleteAction::make(),

@@ -33,7 +33,7 @@ class Order extends Model
         'user_id',           // FK: customer who placed the order
         'status',            // Enum (pending, completed, etc.)
         'payment_method',    // Enum (paypal, mpesa, etc.)
-        'shipping_address',  // Shipping location
+        'address_id',  // Shipping location
     ];
 
     // ================================
@@ -94,6 +94,15 @@ class Order extends Model
         return $this->hasOne(Payment::class);
     }
 
+    /**
+     * Get the shipping address for the order.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function address()
+    {
+        return $this->belongsTo(Address::class);
+    }
     // ================================
     // Accessors
     // ================================

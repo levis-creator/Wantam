@@ -3,7 +3,6 @@ use Livewire\Volt\Component;
 
 new class extends Component {
     public $menuItems = [];
-    public $cartItems = [];
 
     public function mount()
     {
@@ -41,7 +40,6 @@ new class extends Component {
                             ]
                         ],
                     ],
-                    'banner' => ['href' => route('shop.index'), 'image' => 'assets/images/menu/banner-1.jpg', 'title' => 'Last Chance Sale'],
                 ],
             ],
             [
@@ -57,7 +55,6 @@ new class extends Component {
                             ]
                         ],
                     ],
-                    'banner' => ['href' => route('shop.index'), 'image' => 'assets/images/menu/banner-2.jpg', 'title' => 'New Trends Spring 2019'],
                 ],
             ],
             [
@@ -122,49 +119,18 @@ new class extends Component {
                 ],
             ],
         ];
-
-        $this->cartItems = [
-            [
-                'title' => 'Sample T-Shirt',
-                'href' => route('product.show', 'sample-t-shirt'),
-                'qty' => 2,
-                'price' => 19.99,
-                'image' => 'assets/images/products/t-shirt.jpg',
-            ],
-            [
-                'title' => 'Sample Sneakers',
-                'href' => route('product.show', 'sample-sneakers'),
-                'qty' => 1,
-                'price' => 59.99,
-                'image' => 'assets/images/products/sneakers.jpg',
-            ],
-            [
-                'title' => 'Sample Backpack',
-                'href' => route('product.show', 'sample-backpack'),
-                'qty' => 1,
-                'price' => 34.99,
-                'image' => 'assets/images/products/backpack.jpg',
-            ],
-        ];
     }
 }; ?>
 
-<div class="header-middle sticky-header">
-    <div class="container">
-        <nav class="header-left" aria-label="Main navigation">
-            <button class="mobile-menu-toggler" aria-controls="mobile-menu" aria-expanded="false">
-                <span class="sr-only">Toggle mobile menu</span>
-                <i class="icon-bars" aria-hidden="true"></i>
-            </button>
-            <a href="{{ route('home') }}" class="logo" title="{{ config('app.name') }} E-commerce">
-                <img src="{{ asset('assets/images/demos/demo-10/logo.png') }}"
-                    alt="{{ config('app.name') }} E-commerce Logo" width="105" height="25">
-            </a>
-        </nav><!-- End .header-left -->
-        <div class="header-right">
-            <livewire:components.header.main-nav :items="$menuItems" />
-            <livewire:components.header.search-bar />
-            <livewire:components.header.cart-dropdown :items="$cartItems" />
-        </div><!-- End .header-right -->
-    </div><!-- End .container -->
-</div><!-- End .header-middle -->
+<div class="">
+    <div class="mobile-menu-overlay"></div><!-- End .mobile-menu-overlay -->
+
+    <div class="mobile-menu-container">
+        <div class="mobile-menu-wrapper">
+            <span class="mobile-menu-close"><i class="icon-close"></i></span>
+            <livewire:components.header.mobile.mobile-search />
+            <livewire:components.header.mobile.mobile-nav :items="$menuItems" />
+            <livewire:components.header.mobile.social-icons />
+        </div><!-- End .mobile-menu-wrapper -->
+    </div><!-- End .mobile-menu-container -->
+</div>

@@ -3,43 +3,26 @@ use Livewire\Volt\Component;
 
 new class extends Component {
     public $items;
-}
-?>
 
-<nav class="main-nav" aria-label="Main navigation">
+    public function mount($items)
+    {
+        $this->items = $items;
+    }
+}; ?>
+
+<nav class="main-nav" aria-label="Primary navigation">
     <ul class="menu sf-arrows">
         @foreach($items as $item)
             <li class="{{ $item['active'] ?? false ? 'megamenu-container active' : '' }}">
-                <a href="{{ route($item['href']) }}" class="sf-with-ul" title="{{ $item['label'] }} page">
+                <a href="{{ $item['href'] }}" class="sf-with-ul" title="{{ $item['label'] }} page">
                     {{ $item['label'] }}
                 </a>
-                @if(isset($item['megamenu']))
+                @if(isset($item['megamenu']) && $item['megamenu'])
                     <div
                         class="megamenu {{ $item['label'] === 'Shop' ? 'megamenu-md' : ($item['label'] === 'Product' ? 'megamenu-sm' : 'demo') }}">
                         <div
                             class="{{ $item['label'] === 'Shop' || $item['label'] === 'Product' ? 'row no-gutters' : 'menu-col' }}">
-                            @if($item['label'] === 'Home')
-                                <div class="menu-title">{{ $item['megamenu']['title'] }}</div><!-- End .menu-title -->
-                                <div class="demo-list">
-                                    @foreach($item['megamenu']['items'] as $demo)
-                                        <div class="demo-item">
-                                            <a href="{{ route($demo['href']) }}" title="{{ $demo['title'] }}">
-                                                <span class="demo-bg" style="background-image: url({{ asset($demo['image']) }});"
-                                                    aria-hidden="true"></span>
-                                                <span class="demo-title">{{ $demo['title'] }}</span>
-                                            </a>
-                                        </div><!-- End .demo-item -->
-                                    @endforeach
-                                </div><!-- End .demo-list -->
-                                <div class="megamenu-action text-center">
-                                    <a href="{{ route($item['megamenu']['action']['href']) }}"
-                                        class="btn btn-outline-primary-2 view-all-demos"
-                                        title="{{ $item['megamenu']['action']['label'] }}">
-                                        <span>{{ $item['megamenu']['action']['label'] }}</span>
-                                        <i class="{{ $item['megamenu']['action']['icon'] }}" aria-hidden="true"></i>
-                                    </a>
-                                </div><!-- End .text-center -->
-                            @elseif($item['label'] === 'Shop' || $item['label'] === 'Product')
+                            @if($item['label'] === 'Shop' || $item['label'] === 'Product')
                                 <div class="col-md-{{ $item['label'] === 'Shop' ? '8' : '6' }}">
                                     <div class="menu-col">
                                         <div class="row">
@@ -49,7 +32,7 @@ new class extends Component {
                                                     <ul>
                                                         @foreach($section['items'] as $subItem)
                                                             <li>
-                                                                <a href="{{ route($subItem['href']) }}" title="{{ $subItem['label'] }}">
+                                                                <a href="{{ $subItem['href'] }}" title="{{ $subItem['label'] }}">
                                                                     {{ $subItem['label'] }}
                                                                     @if(isset($subItem['badge']))
                                                                         <span
@@ -66,7 +49,7 @@ new class extends Component {
                                 </div><!-- End .col-md -->
                                 <div class="col-md-{{ $item['label'] === 'Shop' ? '4' : '6' }}">
                                     <div class="banner banner-overlay">
-                                        <a href="{{ route($item['megamenu']['banner']['href']) }}" class="banner banner-menu"
+                                        <a href="{{ $item['megamenu']['banner']['href'] }}" class="banner banner-menu"
                                             title="{{ $item['megamenu']['banner']['title'] }}">
                                             <img src="{{ asset($item['megamenu']['banner']['image']) }}"
                                                 alt="{{ $item['megamenu']['banner']['title'] }} Banner">
@@ -82,7 +65,7 @@ new class extends Component {
                                         </a>
                                     </div><!-- End .banner -->
                                 </div><!-- End .col-md -->
-                            @elseif($item['label'] === 'Pages' || $item['label'] === 'Blog' || $item['label'] === 'Elements')
+                            @elseif($item['label'] === 'Pages' || $item['label'] === 'Blog')
                                 <div class="menu-col">
                                     <ul>
                                         @foreach($item['megamenu']['sidebar'] as $section)
@@ -91,7 +74,7 @@ new class extends Component {
                                                 <ul>
                                                     @foreach($section['items'] as $subItem)
                                                         <li>
-                                                            <a href="{{ route($subItem['href']) }}" title="{{ $subItem['label'] }}">
+                                                            <a href="{{ $subItem['href'] }}" title="{{ $subItem['label'] }}">
                                                                 {{ $subItem['label'] }}
                                                                 @if(isset($subItem['badge']))
                                                                     <span

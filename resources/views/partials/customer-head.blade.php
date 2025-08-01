@@ -1,22 +1,37 @@
-<!-- resources/views/partials/_head.blade.php -->
-
 <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>Molla - Bootstrap eCommerce Template</title>
-<meta name="keywords" content="HTML5 Template">
-<meta name="description" content="Molla - Bootstrap eCommerce Template">
-<meta name="author" content="p-themes">
+<title>{{ $title ?? config('app.name') }} - E-commerce Store</title>
+<meta name="description"
+    content="{{ $meta['description'] ?? config('app.name') . ' - Your trusted online store for quality products and exceptional service.' }}">
+<meta name="keywords"
+    content="{{ $meta['keywords'] ?? 'e-commerce, shopping, ' . config('app.name') . ', products, online store' }}">
+<meta name="author" content="{{ config('app.name') }}">
 
-<!-- Favicon -->
+<!-- Open Graph / Facebook -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="{{ $title ?? config('app.name') }}">
+<meta property="og:description"
+    content="{{ $meta['description'] ?? config('app.name') . ' - Shop quality products online.' }}">
+<meta property="og:image" content="{{ asset('assets/images/demos/demo-10/logo.png') }}">
+<meta property="og:url" content="{{ url()->current() }}">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="{{ $title ?? config('app.name') }}">
+<meta name="twitter:description"
+    content="{{ $meta['description'] ?? config('app.name') . ' - Shop quality products online.' }}">
+<meta name="twitter:image" content="{{ asset('assets/images/demos/demo-10/logo.png') }}">
+
+<!-- Favicon and PWA -->
 <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('assets/images/icons/apple-touch-icon.png') }}">
 <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('assets/images/icons/favicon-32x32.png') }}">
 <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('assets/images/icons/favicon-16x16.png') }}">
-<link rel="manifest" href="{{ asset('assets/images/icons/site.html') }}">
+<link rel="manifest" href="{{ asset('assets/images/icons/site.webmanifest') }}">
 <link rel="mask-icon" href="{{ asset('assets/images/icons/safari-pinned-tab.svg') }}" color="#666666">
 <link rel="shortcut icon" href="{{ asset('assets/images/icons/favicon.ico') }}">
-<meta name="apple-mobile-web-app-title" content="Molla">
-<meta name="application-name" content="Molla">
+<meta name="apple-mobile-web-app-title" content="{{ config('app.name') }}">
+<meta name="application-name" content="{{ config('app.name') }}">
 <meta name="msapplication-TileColor" content="#cc9966">
 <meta name="msapplication-config" content="{{ asset('assets/images/icons/browserconfig.xml') }}">
 <meta name="theme-color" content="#ffffff">
@@ -31,3 +46,12 @@
 <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
 <link rel="stylesheet" href="{{ asset('assets/css/skins/skin-demo-10.css') }}">
 <link rel="stylesheet" href="{{ asset('assets/css/demos/demo-10.css') }}">
+
+<!-- Tailwind CSS -->
+<link rel="stylesheet" href="{{ asset('css/app.css') }}">
+
+<!-- Alpine.js -->
+<script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+
+<!-- Livewire Styles -->
+@livewireStyles

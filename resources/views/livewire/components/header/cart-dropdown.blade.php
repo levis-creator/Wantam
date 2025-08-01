@@ -5,15 +5,31 @@ new class extends Component {
     public $items = [];
     public $cartCount = 0;
 
-    public function mount()
+    public function mount($items = null)
     {
-        $this->items = auth()->check() ? auth()->user()->cart->items->map(fn($item) => [
-            'title' => $item->product->name,
-            'href' => 'product.' . $item->product->slug,
-            'qty' => $item->quantity,
-            'price' => $item->product->price,
-            'image' => $item->product->image,
-        ])->toArray() : [];
+        $this->items = $items ?? [
+            [
+                'title' => 'Sample T-Shirt',
+                'href' => route('product.show', 'sample-t-shirt'),
+                'qty' => 2,
+                'price' => 19.99,
+                'image' => 'assets/images/products/t-shirt.jpg',
+            ],
+            [
+                'title' => 'Sample Sneakers',
+                'href' => route('product.show', 'sample-sneakers'),
+                'qty' => 1,
+                'price' => 59.99,
+                'image' => 'assets/images/products/sneakers.jpg',
+            ],
+            [
+                'title' => 'Sample Backpack',
+                'href' => route('product.show', 'sample-backpack'),
+                'qty' => 1,
+                'price' => 34.99,
+                'image' => 'assets/images/products/backpack.jpg',
+            ],
+        ];
         $this->cartCount = array_sum(array_column($this->items, 'qty'));
     }
 
@@ -21,9 +37,6 @@ new class extends Component {
     {
         $this->items[$index]['qty']++;
         $this->cartCount = array_sum(array_column($this->items, 'qty'));
-        if (auth()->check()) {
-            auth()->user()->cart->items()->where('product_id', explode('.', $this->items[$index]['href'])[1])->update(['quantity' => $this->items[$index]['qty']]);
-        }
     }
 
     public function decrement($index)
@@ -31,17 +44,11 @@ new class extends Component {
         if ($this->items[$index]['qty'] > 1) {
             $this->items[$index]['qty']--;
             $this->cartCount = array_sum(array_column($this->items, 'qty'));
-            if (auth()->check()) {
-                auth()->user()->cart->items()->where('product_id', explode('.', $this->items[$index]['href'])[1])->update(['quantity' => $this->items[$index]['qty']]);
-            }
         }
     }
 
     public function removeItem($index)
     {
-        if (auth()->check()) {
-            auth()->user()->cart->items()->where('product_id', explode('.', $this->items[$index]['href'])[1])->delete();
-        }
         unset($this->items[$index]);
         $this->items = array_values($this->items);
         $this->cartCount = array_sum(array_column($this->items, 'qty'));
@@ -51,8 +58,7 @@ new class extends Component {
     {
         return array_sum(array_map(fn($item) => $item['qty'] * $item['price'], $this->items));
     }
-}
-?>
+}; ?>
 
 <div class="dropdown cart-dropdown" x-data="{ open: false }">
     <a href="#" class="dropdown-toggle" role="button" x-on:click="open = !open" aria-haspopup="true"
@@ -67,7 +73,7 @@ new class extends Component {
                 <div class="product">
                     <div class="product-cart-details">
                         <h4 class="product-title">
-                            <a href="{{ route($item['href']) }}" title="{{ $item['title'] }}">{{ $item['title'] }}</a>
+                            <a href="{{ $item['href'] }}" title="{{ $item['title'] }}">{{ $item['title'] }}</a>
                         </h4>
                         <span class="cart-product-info">
                             <span class="cart-product-qty">{{ $item['qty'] }}</span>
@@ -75,7 +81,7 @@ new class extends Component {
                         </span>
                     </div><!-- End .product-cart-details -->
                     <figure class="product-image-container">
-                        <a href="{{ route($item['href']) }}" class="product-image">
+                        <a href="{{ $item['href'] }}" class="product-image">
                             <img src="{{ asset($item['image']) }}" alt="{{ $item['title'] }}">
                         </a>
                     </figure>

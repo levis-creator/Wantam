@@ -16,7 +16,7 @@ new class extends Component {
         aria-label="Toggle search input" title="Search products">
         <i class="icon-search" aria-hidden="true"></i>
     </a>
-    <form action="{{ route('search') }}" method="get" x-data="{ open: false }">
+    <form method="get" x-data="{ open: false }">
         <div class="header-search-wrapper">
             <label for="q" class="sr-only">Search</label>
             <input type="search" class="form-control" name="q" id="q" placeholder="Search in..."

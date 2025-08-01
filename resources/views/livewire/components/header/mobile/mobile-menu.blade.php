@@ -122,15 +122,12 @@ new class extends Component {
     }
 }; ?>
 
-<div class="">
-    <div class="mobile-menu-overlay"></div><!-- End .mobile-menu-overlay -->
 
-    <div class="mobile-menu-container">
-        <div class="mobile-menu-wrapper">
-            <span class="mobile-menu-close"><i class="icon-close"></i></span>
-            <livewire:components.header.mobile.mobile-search />
-            <livewire:components.header.mobile.mobile-nav :items="$menuItems" />
-            <livewire:components.header.mobile.social-icons />
-        </div><!-- End .mobile-menu-wrapper -->
-    </div><!-- End .mobile-menu-container -->
-</div>
+<div class="mobile-menu-container">
+    <div class="mobile-menu-wrapper">
+        <span class="mobile-menu-close"><i class="icon-close"></i></span>
+        <livewire:components.header.mobile.mobile-search />
+        <livewire:components.header.mobile.mobile-nav :items="$menuItems" />
+        <livewire:components.header.mobile.social-icons />
+    </div><!-- End .mobile-menu-wrapper -->
+</div><!-- End .mobile-menu-container -->

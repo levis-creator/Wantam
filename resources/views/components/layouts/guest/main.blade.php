@@ -7,15 +7,16 @@
     @livewireStyles
 </head>
 
-<body class="bg-slate-50 dark:bg-zinc-800">
+<body>
     <div class="page-wrapper">
         <livewire:components.header.header />
-        <livewire:components.header.mobile.mobile-menu />
-
         {{ $slot }}
         <x-layouts.guest.footer />
     </div>
-
+    <button id="scroll-top" title="Back to Top"><i class="icon-arrow-up"></i></button>
+    <div class="mobile-menu-overlay"></div><!-- End .mobile-menu-overlay -->
+    <livewire:components.header.mobile.mobile-menu />
+    {{-- <livewire:components.newsletter.newsletter-popup /> --}}
     @include('partials.customer-script')
 </body>
 

@@ -61,65 +61,10 @@ new class extends Component {
                 ],
             ],
             [
-                'label' => 'Pages',
-                'href' => route('about'),
-                'active' => request()->routeIs('about', 'contact', 'faq', 'terms', 'privacy', 'how-to-shop', 'payment-methods', 'money-back', 'returns', 'shipping', 'help', 'track-order', '404'),
-                'megamenu' => [
-                    'sidebar' => [
-                        [
-                            'title' => 'About',
-                            'items' => [
-                                ['href' => route('about'), 'label' => 'About'],
-                            ]
-                        ],
-                        [
-                            'title' => 'Contact',
-                            'items' => [
-                                ['href' => route('contact'), 'label' => 'Contact'],
-                            ]
-                        ],
-                        [
-                            'title' => 'Other Pages',
-                            'items' => [
-                                ['href' => route('login'), 'label' => 'Login'],
-                                ['href' => route('faq'), 'label' => 'FAQs'],
-                                ['href' => route('404'), 'label' => 'Error 404'],
-                                ['href' => route('terms'), 'label' => 'Terms and Conditions'],
-                                ['href' => route('privacy'), 'label' => 'Privacy Policy'],
-                                ['href' => route('how-to-shop'), 'label' => 'How to Shop'],
-                                ['href' => route('payment-methods'), 'label' => 'Payment Methods'],
-                                ['href' => route('money-back'), 'label' => 'Money Back Guarantee'],
-                                ['href' => route('returns'), 'label' => 'Returns'],
-                                ['href' => route('shipping'), 'label' => 'Shipping'],
-                                ['href' => route('help'), 'label' => 'Help'],
-                                ['href' => route('track-order'), 'label' => 'Track Order'],
-                            ]
-                        ],
-                    ],
-                ],
-            ],
-            [
                 'label' => 'Blog',
                 'href' => route('blog.index'),
                 'active' => request()->routeIs('blog.*'),
-                'megamenu' => [
-                    'sidebar' => [
-                        [
-                            'title' => 'Blog',
-                            'items' => [
-                                ['href' => route('blog.index'), 'label' => 'Blog Home'],
-                            ]
-                        ],
-                        [
-                            'title' => 'Single Post',
-                            'items' => [
-                                ['href' => route('blog.show', 'summer-fashion-trends'), 'label' => 'Summer Fashion Trends'],
-                                ['href' => route('blog.show', 'tech-gadgets-2025'), 'label' => 'Tech Gadgets 2025'],
-                                ['href' => route('blog.show', 'home-decoration-tips'), 'label' => 'Home Decoration Tips'],
-                            ]
-                        ],
-                    ],
-                ],
+                'megamenu' => null
             ],
         ];
 

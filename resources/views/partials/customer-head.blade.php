@@ -23,6 +23,9 @@
     content="{{ $meta['description'] ?? config('app.name') . ' - Shop quality products online.' }}">
 <meta name="twitter:image" content="{{ asset('assets/images/demos/demo-10/logo.png') }}">
 
+<!-- Permissions Policy -->
+<meta http-equiv="Permissions-Policy" content="geolocation=(), camera=(), microphone=()">
+
 <!-- Favicon and PWA -->
 <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('assets/images/icons/apple-touch-icon.png') }}">
 <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('assets/images/icons/favicon-32x32.png') }}">
@@ -48,10 +51,10 @@
 <link rel="stylesheet" href="{{ asset('assets/css/demos/demo-10.css') }}">
 
 <!-- Tailwind CSS -->
-<link rel="stylesheet" href="{{ asset('css/app.css') }}">
-
-<!-- Alpine.js -->
+@vite(['resources/css/app.css', 'resources/js/app.js'])
+<!-- Alpine.js with Persist Plugin -->
 <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/@alpinejs/persist@3.x.x/dist/cdn.min.js" defer></script>
 
 <!-- Livewire Styles -->
 @livewireStyles

@@ -5,7 +5,7 @@ REM Target directory for Volt pages
 set "PAGES_DIR=C:\Users\levis\Herd\Wantam\resources\views\livewire\pages"
 
 REM List of Volt page names
-set pages=about contact faq help terms privacy cart wishlist track-order about how-to-shop payment-methods money-back returns shipping cart
+set pages=about contact faq help terms privacy cart wishlist track-order about account how-to-shop payment-methods money-back returns shipping cart category checkout
 
 REM Go to directory
 cd /d "%PAGES_DIR%" || (

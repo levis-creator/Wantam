@@ -5,6 +5,8 @@ use Livewire\WithPagination;
 use Livewire\Attributes\Layout;
 use App\Services\ProductService;
 
+// todo: fix pagination
+// bug: pagination not changing query
 new #[Layout('components.layouts.guest')]
     class extends Component {
     use WithPagination;

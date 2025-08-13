@@ -41,8 +41,9 @@ Volt::route('/404', 'pages.404')->name('404'); // 404 error page
 Volt::route('/503', 'pages.503')->name('500'); // 500 error page
 
 // Shop and product routes
+Volt::route('/categories', 'pages.category')->name('shop.index'); // Shop homepage
 Volt::route('/shop', 'pages.catalogue')->name('shop.index'); // Shop homepage
-Volt::route('/shop/{slug}', 'pages.category')->name('shop.category'); // Products in category
+Volt::route('/shop/{slug}', 'pages.catalogue')->name('shop.category'); // Products in category
 Volt::route('/product/{slug}', 'pages.product')->name('product.show'); // Product details
 
 // Blog routes

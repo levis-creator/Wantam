@@ -16,14 +16,16 @@ class CategoryFactory extends Factory
     public function definition(): array
     {
         $name = $this->faker->unique()->words(2, true);
+        $slug = Str::slug($name) . '-' . Str::random(4); // ensure uniqueness
 
         return [
             'name' => $name,
-            'slug' => Str::slug($name), // parent-child slug handling is done in model boot
+            'slug' => $slug,
             'description' => $this->faker->sentence(),
             'image' => $this->faker->optional()->imageUrl(640, 480, 'categories'),
             'is_active' => $this->faker->boolean(90),
-            'parent_id' => null, // can be filled in a seeder to simulate nesting
+            'is_featured' => $this->faker->boolean(40),
+            'parent_id' => null,
         ];
     }
 
@@ -44,12 +46,21 @@ class CategoryFactory extends Factory
     }
 
     /**
-     * Assign a parent category (for nested categories).
+     * Assign a parent category.
      */
     public function withParent(Category $parent): static
     {
-        return $this->state(fn() => [
-            'parent_id' => $parent->id,
-        ]);
+        return $this->state(fn() => ['parent_id' => $parent->id]);
+    }
+
+    /**
+     * Assign a random existing category as parent (optional helper).
+     */
+    public function randomParent(): static
+    {
+        return $this->state(function () {
+            $parent = Category::inRandomOrder()->first();
+            return ['parent_id' => $parent?->id];
+        });
     }
 }

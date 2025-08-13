@@ -13,8 +13,12 @@ return new class extends Migration
     {
         Schema::create('advertisements', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->string('title')->nullable();
-            $table->string('image'); // banner image path
+            $table->string('title');
+            $table->string('subtitle');
+            $table->string('price');
+            $table->string('image_default'); // default banner image path
+            $table->string('image_mobile'); // mobile banner image path
+            $table->string('default_alt');
             $table->string('link')->nullable(); // redirect on click
             $table->foreignUuid('product_id')->nullable()->constrained()->nullOnDelete();
             $table->timestamp('starts_at')->nullable();

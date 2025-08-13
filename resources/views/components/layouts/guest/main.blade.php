@@ -4,7 +4,8 @@
 
 <head>
     @include('partials.customer-head')
-    @livewireStyles
+    @laravelPWA
+
 </head>
 
 <body>

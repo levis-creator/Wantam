@@ -25,7 +25,7 @@ new
     <livewire:components.home.new-arrivals />
     <livewire:components.home.category-section />
     <div class="mb-4"></div><!-- End .mb-4 -->
-    <livewire:components.home.top-selling />
+    {{-- <livewire:components.home.top-selling /> --}}
     <div class="mb-5"></div><!-- End .mb-5 -->
     <livewire:components.home.ad-banner />
     <livewire:components.home.blog-section />

@@ -12,33 +12,78 @@ class CategorySeeder extends Seeder
      */
     public function run(): void
     {
+        $categories = [
+            [
+                'image' => 'categories/banner-5.jpg',
+                'name' => "Women's",
+                'slug' => 'women',
+                'is_active' => true,
+                'is_featured' => true,
+                'description' => 'Shop stylish and trending women’s wear.',
+            ],
+            [
+                'image' => 'categories/banner-6.jpg',
+                'name' => "Men's",
+                'slug' => 'men',
+                'is_active' => true,
+                'is_featured' => true,
+                'description' => 'Discover modern fashion for men.',
+            ],
+            [
+                'image' => 'categories/banner-7.jpg',
+                'name' => "Kid's",
+                'slug' => 'kids',
+                'is_active' => true,
+                'is_featured' => false,
+                'description' => 'Trendy and fun outfits for kids.',
+            ],
+        ];
+
+        foreach ($categories as $data) {
+            Category::create([
+                'name' => $data['name'],
+                'slug' => $data['slug'],
+                'description' => $data['description'],
+                'image' => $data['image'], // This should be relative to `storage`
+                'is_active' => $data['is_active'],
+                'is_featured' => $data['is_featured'],
+                'parent_id' => null,
+            ]);
+        }
+
+        $this->command->info('Seeded featured categories with images.');
         // Create 5 active top-level categories
         $topLevelCategories = Category::factory()
             ->count(5)
             ->active()
             ->create();
 
-        // For each top-level category, create 2 child categories (active and inactive)
+        $this->command->info('Top-level active categories created: ' . $topLevelCategories->count());
+
         foreach ($topLevelCategories as $parent) {
             // Active child categories
-            Category::factory()
+            $activeChildren = Category::factory()
                 ->count(2)
                 ->active()
                 ->withParent($parent)
                 ->create();
 
             // Inactive child categories
-            Category::factory()
+            $inactiveChildren = Category::factory()
                 ->count(1)
                 ->inactive()
                 ->withParent($parent)
                 ->create();
+
+            $this->command->info("Parent '{$parent->name}' has " . $activeChildren->count() . " active and " . $inactiveChildren->count() . " inactive children.");
         }
 
-        // Optionally add some inactive top-level categories too
-        Category::factory()
+        // Create 2 inactive top-level categories
+        $inactiveTopLevel = Category::factory()
             ->count(2)
             ->inactive()
             ->create();
+
+        $this->command->info('Inactive top-level categories created: ' . $inactiveTopLevel->count());
     }
 }

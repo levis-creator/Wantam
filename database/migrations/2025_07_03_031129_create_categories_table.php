@@ -22,6 +22,7 @@ return new class extends Migration
                 ->nullOnDelete();
             $table->string('image')->nullable();
             $table->boolean('is_active')->default(true);
+            $table->boolean('is_featured')->default(true);
             $table->timestamps();
         });
     }

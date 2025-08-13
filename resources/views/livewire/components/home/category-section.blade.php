@@ -1,31 +1,36 @@
-@php
-    $banners = [
-        [
-            'image' => 'assets/images/demos/demo-10/banners/banner-5.jpg',
-            'title' => "Women's",
-            'subtitle' => '125 Products',
-            'link' => route('shop.category', ['slug' => 'women']),
-        ],
-        [
-            'image' => 'assets/images/demos/demo-10/banners/banner-6.jpg',
-            'title' => "Men's",
-            'subtitle' => '97 Products',
-            'link' => route('shop.category', ['slug' => 'men']),
-        ],
-        [
-            'image' => 'assets/images/demos/demo-10/banners/banner-7.jpg',
-            'title' => "Kid's",
-            'subtitle' => '48 Products',
-            'link' => route('shop.category', ['slug' => 'kids']),
-        ],
-    ];
-@endphp
+<?php
+
+namespace App\Livewire;
+
+use Livewire\Volt\Component;
+use App\Models\Category;
+
+new class extends Component {
+    public $banners = [];
+
+    public function mount()
+    {
+        $this->banners = Category::active()
+            ->isFeatured()
+            ->hasImage()
+            ->take(3)
+            ->get()
+            ->map(function ($category) {
+                return [
+                    'image' => $category->image_url ?? 'assets/images/demos/demo-10/banners/placeholder.jpg',
+                    'title' => $category->name,
+                    'productsCount' => $category->product_count,
+                    'slug' => $category->slug,
+                ];
+            })->toArray();
+    }
+};
+?>
 
 <div class="container">
     <div class="row justify-content-center">
         @foreach ($banners as $banner)
-            <livewire:components.ui.category-banner :image="$banner['image']" :title="$banner['title']"
-                :subtitle="$banner['subtitle']" :link="$banner['link']" />
+            <livewire:components.ui.category-banner :banner="$banner" />
         @endforeach
     </div>
 </div>

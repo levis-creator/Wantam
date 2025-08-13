@@ -32,6 +32,7 @@ class Category extends Model
         'image',
         'parent_id',
         'is_active',
+        'is_featured',
     ];
 
     /**
@@ -66,11 +67,27 @@ class Category extends Model
     }
 
     /**
+     * Get the count of products in this category.
+     */
+    public function getProductCountAttribute(): int
+    {
+        return $this->products()->count();
+    }
+
+    /**
      * Scope a query to only include active categories.
      */
     public function scopeActive($query)
     {
         return $query->where('is_active', true);
+    }
+
+    /**
+     * Scope a query to only include featured categories.
+     */
+    public function scopeIsFeatured($query)
+    {
+        return $query->where('is_featured', true);
     }
 
     /**
@@ -95,6 +112,13 @@ class Category extends Model
     public function products()
     {
         return $this->hasMany(Product::class);
+    }
+    /**
+     * Scope a query to only include categories that have images.
+     */
+    public function scopeHasImage($query)
+    {
+        return $query->whereNotNull('image')->where('image', '!=', '');
     }
 
     /**

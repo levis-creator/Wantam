@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -18,7 +19,11 @@ class Advertisement extends Model
      */
     protected $fillable = [
         'title',
-        'image',
+        'subtitle',
+        'price',
+        'image_default',
+        'default_alt',
+        'image_mobile',
         'link',
         'product_id',
         'starts_at',

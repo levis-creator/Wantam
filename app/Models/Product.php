@@ -7,6 +7,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Support\Str;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\Storage;
 
 class Product extends Model
 {
@@ -16,7 +19,6 @@ class Product extends Model
     protected $keyType = 'string';
 
     protected $fillable = [
-        'id',
         'category_id',
         'brand_id',
         'name',
@@ -29,15 +31,13 @@ class Product extends Model
         'price',
         'is_active',
         'is_featured',
-        'rating',
     ];
 
     protected $casts = [
         'images' => 'array',
-        'original_price' => 'float',
-        'discount' => 'float',
-        'price' => 'float',
-        'rating' => 'float',
+        'original_price' => 'decimal:2',
+        'discount' => 'decimal:2',
+        'price' => 'decimal:2',
         'is_active' => 'boolean',
         'is_featured' => 'boolean',
     ];
@@ -47,6 +47,10 @@ class Product extends Model
         'images_urls',
         'in_stock',
         'total_stock',
+        'rating',
+        'discounted_price',
+        'formatted_price',
+        'formatted_original_price',
     ];
 
     protected static function booted(): void
@@ -61,98 +65,128 @@ class Product extends Model
             if ($product->isDirty('name')) {
                 $product->generateSlug();
             }
-            $product->calculateDiscountedPrice();
+            if ($product->isDirty(['original_price', 'discount'])) {
+                $product->calculateDiscountedPrice();
+            }
         });
     }
 
     protected function generateId(): void
     {
-        if (empty($this->id)) {
-            $this->id = (string) Str::uuid();
-        }
+        $this->id = $this->id ?? (string) Str::orderedUuid();
     }
 
     protected function generateSlug(): void
     {
-        $baseSlug = Str::slug($this->name);
-        $slug = $baseSlug . '-' . substr($this->id, 0, 4);
-        $originalSlug = $slug;
-        $i = 1;
-
-        while (
-            static::where('slug', $slug)
-            ->where('id', '!=', $this->id)
-            ->exists()
-        ) {
-            $slug = $originalSlug . '-' . $i++;
-        }
-
-        $this->slug = $slug;
+        $this->slug = Str::slug($this->name) . '-' . substr((string) Str::uuid(), 0, 8);
     }
-
     protected function calculateDiscountedPrice(): void
     {
-        if ($this->original_price && $this->discount) {
+        if ($this->original_price && $this->discount > 0) {
             $discountAmount = $this->original_price * ($this->discount / 100);
             $this->price = round($this->original_price - $discountAmount, 2);
-        } elseif ($this->original_price && empty($this->price)) {
+        } else {
             $this->price = $this->original_price;
         }
     }
 
     // ========================
-    // Accessors (Laravel 12 style using asset())
+    // Accessors
     // ========================
 
     public function getMainImageUrlAttribute(): ?string
     {
-        return $this->main_image
-            ? asset('storage/' . ltrim($this->main_image, '/'))
-            : null;
+        if (empty($this->main_image)) {
+            return null;
+        }
+
+        return filter_var($this->main_image, FILTER_VALIDATE_URL)
+            ? $this->main_image
+            : Storage::url($this->main_image);
     }
 
     public function getImagesUrlsAttribute(): array
     {
-        return is_array($this->images)
-            ? collect($this->images)
+        if (empty($this->images) || !is_array($this->images)) {
+            return [];
+        }
+
+        return collect($this->images)
             ->filter()
-            ->map(fn($image) => asset('storage/' . ltrim($image, '/')))
-            ->toArray()
-            : [];
+            ->map(function ($image) {
+                return filter_var($image, FILTER_VALIDATE_URL)
+                    ? $image
+                    : Storage::url($image);
+            })
+            ->toArray();
     }
 
     public function getInStockAttribute(): bool
     {
-        return $this->variants()->where('stock', '>', 0)->exists();
+        if (!$this->relationLoaded('variants')) {
+            return $this->variants()->where('stock', '>', 0)->exists();
+        }
+
+        return $this->variants->contains('stock', '>', 0);
     }
 
     public function getTotalStockAttribute(): int
     {
-        return $this->variants()->sum('stock');
+        if (!$this->relationLoaded('variants')) {
+            return $this->variants()->sum('stock');
+        }
+
+        return $this->variants->sum('stock');
+    }
+
+    public function getRatingAttribute(): ?float
+    {
+        if (!$this->relationLoaded('reviews')) {
+            return $this->reviews()->avg('rating') ?: null;
+        }
+
+        return round($this->reviews->avg('rating'), 1);
+    }
+
+    public function getDiscountedPriceAttribute(): float
+    {
+        return $this->price;
+    }
+
+    public function getFormattedPriceAttribute(): string
+    {
+        return number_format($this->price, 2);
+    }
+
+    public function getFormattedOriginalPriceAttribute(): ?string
+    {
+        return $this->original_price ? number_format($this->original_price, 2) : null;
     }
 
     // ====================
     // Relationships
     // ====================
 
-    public function category()
+    public function category(): BelongsTo
     {
-        return $this->belongsTo(Category::class);
+        return $this->belongsTo(Category::class)->withDefault([
+            'name' => 'Uncategorized',
+        ]);
     }
 
-    public function brand()
+    public function brand(): BelongsTo
     {
-        return $this->belongsTo(Brand::class);
+        return $this->belongsTo(Brand::class)->withDefault();
     }
 
-    public function reviews()
+    public function reviews(): HasMany
     {
-        return $this->hasMany(Review::class);
+        return $this->hasMany(Review::class)->latest();
     }
 
-    public function variants()
+    public function variants(): HasMany
     {
-        return $this->hasMany(ProductVariant::class);
+        return $this->hasMany(ProductVariant::class)->orderBy('price');
     }
 
     // ====================
@@ -163,9 +197,32 @@ class Product extends Model
     {
         return $query->where('is_active', true);
     }
-
-    public function scopeFeatured($query)
+    public function scopePriceBetween($query, $min, $max)
     {
-        return $query->where('is_featured', true)->where('is_active', true);
+        return $query->whereBetween('price', [$min, $max]);
+    }
+
+    public function scopeMinRating($query, $rating)
+    {
+        return $query->whereHas('reviews', function ($q) use ($rating) {
+            $q->selectRaw('avg(rating) as avg_rating')
+                ->havingRaw('avg_rating >= ?', [$rating]);
+        });
+    }
+
+    public function scopeIsFeatured($query)
+    {
+        return $query->where('is_featured', true)->active();
+    }
+
+    public function scopeWithDiscount($query)
+    {
+        return $query->where('discount', '>', 0);
+    }
+
+    public function scopeSearch($query, string $search)
+    {
+        return $query->where('name', 'like', "%{$search}%")
+            ->orWhere('description', 'like', "%{$search}%");
     }
 }

@@ -15,7 +15,7 @@ class SizeFactory extends Factory
 
     public function definition(): array
     {
-        $sizeValue = $this->faker->randomElement(['S', 'M', 'L', 'XL', '8', '9.5', '10', '42', '43']);
+        $sizeValue = fake()->randomElement(['S', 'M', 'L', 'XL', '8', '9.5', '10', '42', '43']);
         $label = match ($sizeValue) {
             'S', 'M', 'L', 'XL' => 'Size ' . $sizeValue,
             default => 'EU ' . $sizeValue,

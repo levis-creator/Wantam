@@ -24,7 +24,7 @@ class ColorFactory extends Factory
             ['name' => 'Gray', 'hex' => '#808080'],
         ];
 
-        $color = $this->faker->randomElement($colorData);
+        $color = fake()->randomElement($colorData);
 
         return [
             'id' => Str::uuid()->toString(),

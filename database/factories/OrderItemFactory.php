@@ -22,12 +22,12 @@ class OrderItemFactory extends Factory
         $price = $variant->price ?? $product->price;
 
         return [
-            'id' => Str::uuid()->toString(),
-            'order_id' => Order::factory(),
-            'product_id' => $product->id,
+            'id'                 => Str::uuid()->toString(),
+            'order_id'           => Order::factory(),
+            'product_id'         => $product->id,
             'product_variant_id' => $variant->id,
-            'price' => $price,
-            'quantity' => $this->faker->numberBetween(1, 5),
+            'price'              => $price,
+            'quantity'           => fake()->numberBetween(1, 5),
         ];
     }
 }

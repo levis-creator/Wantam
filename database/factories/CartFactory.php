@@ -16,11 +16,11 @@ class CartFactory extends Factory
     public function definition(): array
     {
         return [
-            'id' => Str::uuid()->toString(),
-            'user_id' => User::factory(),
-            'product_id' => Product::factory(),
+            'id'                 => Str::uuid()->toString(),
+            'user_id'            => User::factory(),
+            'product_id'         => Product::factory(),
             'product_variant_id' => ProductVariant::factory(),
-            'quantity' => $this->faker->numberBetween(1, 5),
+            'quantity'           => fake()->numberBetween(1, 5),
         ];
     }
 }

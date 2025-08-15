@@ -14,15 +14,15 @@ class AddressFactory extends Factory
     public function definition(): array
     {
         return [
-            'id' => Str::uuid()->toString(),
-            'user_id' => User::factory(),
-            'name' => $this->faker->name(),
-            'phone' => $this->faker->phoneNumber(),
-            'address' => $this->faker->streetAddress(),
-            'city' => $this->faker->city(),
-            'postal_code' => $this->faker->postcode(),
-            'country' => $this->faker->country(),
-            'is_default' => $this->faker->boolean(20), // 20% chance to be default
+            'id'          => Str::uuid()->toString(),
+            'user_id'     => User::factory(),
+            'name'        => fake()->name(),
+            'phone'       => fake()->phoneNumber(),
+            'address'     => fake()->streetAddress(),
+            'city'        => fake()->city(),
+            'postal_code' => fake()->postcode(),
+            'country'     => fake()->country(),
+            'is_default'  => fake()->boolean(20), // 20% chance to be default
         ];
     }
 }

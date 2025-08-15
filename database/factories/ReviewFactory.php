@@ -16,10 +16,10 @@ class ReviewFactory extends Factory
     {
         return [
             'id' => (string) Str::uuid(),
-            'user_id' => User::factory(),         // Create or use a user
-            'product_id' => Product::factory(),   // Create or use a product
-            'rating' => $this->faker->numberBetween(1, 5),
-            'comment' => $this->faker->optional()->sentence(10),
+            'user_id' => User::factory(),
+            'product_id' => Product::factory(),
+            'rating' => fake()->numberBetween(1, 5),
+            'comment' => fake()->optional()->sentence(10),
         ];
     }
 }

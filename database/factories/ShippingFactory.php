@@ -16,13 +16,13 @@ class ShippingFactory extends Factory
     {
         return [
             'id' => Str::uuid()->toString(),
-            'order_id' => Order::factory(), // or use an existing order
+            'order_id' => Order::factory(),
             'address_id' => Address::factory(),
-            'city' => $this->faker->city,
-            'postal_code' => $this->faker->postcode,
-            'country' => $this->faker->country,
-            'tracking_number' => $this->faker->optional()->regexify('[A-Z0-9]{10}'),
-            'status' => $this->faker->randomElement(['pending', 'shipped', 'delivered']),
+            'city' => fake()->city(),
+            'postal_code' => fake()->postcode(),
+            'country' => fake()->country(),
+            'tracking_number' => fake()->optional()->regexify('[A-Z0-9]{10}'),
+            'status' => fake()->randomElement(['pending', 'shipped', 'delivered']),
         ];
     }
 }

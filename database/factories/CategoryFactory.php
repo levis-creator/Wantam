@@ -15,17 +15,17 @@ class CategoryFactory extends Factory
 
     public function definition(): array
     {
-        $name = $this->faker->unique()->words(2, true);
+        $name = fake()->unique()->words(2, true);
         $slug = Str::slug($name) . '-' . Str::random(4); // ensure uniqueness
 
         return [
-            'name' => $name,
-            'slug' => $slug,
-            'description' => $this->faker->sentence(),
-            'image' => $this->faker->optional()->imageUrl(640, 480, 'categories'),
-            'is_active' => $this->faker->boolean(90),
-            'is_featured' => $this->faker->boolean(40),
-            'parent_id' => null,
+            'name'        => $name,
+            'slug'        => $slug,
+            'description' => fake()->sentence(),
+            'image'       => fake()->optional()->imageUrl(640, 480, 'categories'),
+            'is_active'   => fake()->boolean(90),
+            'is_featured' => fake()->boolean(40),
+            'parent_id'   => null,
         ];
     }
 

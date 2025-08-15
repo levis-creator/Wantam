@@ -22,14 +22,14 @@ class BrandFactory extends Factory
      */
     public function definition(): array
     {
-        $name = $this->faker->unique()->company();
+        $name = fake()->unique()->company();
 
         return [
-            'name' => $name,
-            'slug' => Str::slug($name),
-            'description' => $this->faker->paragraph(),
-            'logo' => $this->faker->optional(0.7)->imageUrl(400, 400, 'brands', true, $name), // 70% chance of having a logo
-            'is_active' => $this->faker->boolean(90), // 90% chance of being active
+            'name'        => $name,
+            'slug'        => Str::slug($name),
+            'description' => fake()->paragraph(),
+            'logo'        => fake()->optional(0.7)->imageUrl(400, 400, 'brands', true, $name), // 70% chance of having a logo
+            'is_active'   => fake()->boolean(90), // 90% chance of being active
         ];
     }
 

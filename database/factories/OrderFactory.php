@@ -15,20 +15,20 @@ class OrderFactory extends Factory
     public function definition(): array
     {
         return [
-            'id' => Str::uuid()->toString(),
-            'user_id' => User::factory(),
+            'id'             => Str::uuid()->toString(),
+            'user_id'        => User::factory(),
 
             // Random status: pending, processing, completed, cancelled
-            'status' => $this->faker->randomElement(['pending', 'processing', 'completed', 'cancelled']),
+            'status'         => fake()->randomElement(['pending', 'processing', 'completed', 'cancelled']),
 
             // Payment method
-            'payment_method' => $this->faker->randomElement(['mpesa', 'paypal', 'card', 'cash_on_delivery']),
+            'payment_method' => fake()->randomElement(['mpesa', 'paypal', 'card', 'cash_on_delivery']),
 
             // Shipping address
-            'address_id' => Address::factory(),
+            'address_id'     => Address::factory(),
 
-            'created_at' => now(),
-            'updated_at' => now(),
+            'created_at'     => now(),
+            'updated_at'     => now(),
         ];
     }
 }

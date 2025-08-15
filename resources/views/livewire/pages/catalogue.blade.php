@@ -5,19 +5,32 @@ use Livewire\WithPagination;
 use Livewire\Attributes\Layout;
 use App\Services\ProductService;
 
-// todo: fix pagination
-// bug: pagination not changing query
 new #[Layout('components.layouts.guest')]
     class extends Component {
     use WithPagination;
 
     public $query = '';
-    protected $paginationTheme = 'bootstrap'; // optional if you use Bootstrap
+    public $itemsPerPage = 12;
+    public $totalItems = 0;
+    protected $paginationTheme = 'bootstrap'; // optional for Bootstrap UI
+
+    // Reset pagination when search changes
+    public function updatedQuery()
+    {
+        $this->resetPage();
+    }
 
     public function with(ProductService $productService): array
     {
+        $products = $productService->getPaginatedProducts(
+            $this->itemsPerPage,
+            $this->query
+        );
+
         return [
-            'products' => $productService->getPaginatedProducts(12), // 12 per page example
+            'products' => $products,
+            'itemsPerPage' => $this->itemsPerPage,
+            'totalItems' => $productService->productsCount(),
         ];
     }
 };
@@ -27,7 +40,7 @@ new #[Layout('components.layouts.guest')]
     <div class="container">
 
         {{-- Toolbox --}}
-        <livewire:components.products.toolbox />
+        <livewire:components.products.toolbox :itemsPerPage="$itemsPerPage" :totalItems="$totalItems" />
 
         <div class="products">
             <div class="row">
@@ -38,7 +51,7 @@ new #[Layout('components.layouts.guest')]
 
             {{-- Pagination --}}
             <div class="mt-4">
-                {{ $products->links()}}
+                {{ $products->links() }}
             </div>
         </div>
 

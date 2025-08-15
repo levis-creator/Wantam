@@ -1,3 +1,12 @@
+<?php
+
+use Livewire\Volt\Component;
+
+new class extends Component {
+    public $itemsPerPage = 12;
+    public $totalItems = 0;
+};
+?>
 <div class="toolbox">
     <div class="toolbox-left">
         <a href="#" class="sidebar-toggler"><i class="icon-bars"></i>Filters</a>
@@ -5,7 +14,7 @@
 
     <div class="toolbox-center">
         <div class="toolbox-info">
-            Showing <span>12 of 56</span> Products
+            Showing <span>{{ $itemsPerPage }} of {{ $totalItems }}</span> Products
         </div><!-- End .toolbox-info -->
     </div><!-- End .toolbox-center -->
 

@@ -4,8 +4,8 @@ use Livewire\Volt\Component;
 new class extends Component {
     public $currencies = ['USD', 'EUR'];
     public $languages = [
-        ['name' => 'English', 'code' => 'en', 'hreflang' => 'en-US'],
-        ['name' => 'French', 'code' => 'fr', 'hreflang' => 'fr-FR'],
+        // ['name' => 'English', 'code' => 'en', 'hreflang' => 'en-US'],
+        // ['name' => 'French', 'code' => 'fr', 'hreflang' => 'fr-FR'],
         ['name' => 'Spanish', 'code' => 'es', 'hreflang' => 'es-ES'],
     ];
     public $topMenuItems = [

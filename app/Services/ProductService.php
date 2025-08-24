@@ -75,6 +75,33 @@ class ProductService
 
         return $query->paginate($perPage);
     }
+    /**
+     * Retrieve active products, prioritizing those in a specific category,
+     * then listing the rest, with pagination.
+     *
+     * @param string $categorySlug The slug of the category to prioritize.
+     * @param int $perPage Number of items per page.
+     * @param string|null $search Optional search term to filter by product name.
+     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
+     */
+    public function getProductsByCategory(string $categorySlug, int $perPage = 12, ?string $search = null): LengthAwarePaginator
+    {
+        $query = Product::with(['category', 'reviews'])
+            ->where('products.is_active', 1); // ✅ explicitly specify table
+
+        if (!empty($search)) {
+            $query->where('products.name', 'like', "%{$search}%"); // also qualify
+        }
+
+        $query->leftJoin('categories', 'products.category_id', '=', 'categories.id')
+            ->select('products.*')
+            ->orderByRaw("CASE WHEN categories.slug = ? THEN 0 ELSE 1 END", [$categorySlug])
+            ->orderBy('products.created_at', 'desc');
+
+        return $query->paginate($perPage);
+    }
+
+
 
     /**
      * Count total active products.
@@ -101,6 +128,32 @@ class ProductService
 
         return ProductMapper::mapSingle($product);
     }
+    /**
+     * Get related products by category.
+     *
+     * This method fetches products that belong to the same category
+     * as the given product, excluding the current product itself.
+     * It only retrieves active products, randomizes them,
+     * and limits the results to the specified number.
+     *
+     * @param int $productId The ID of the current product.
+     * @param int $limit The maximum number of related products to return (default: 6).
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    public function getRelatedProducts($productId, int $limit = 6)
+    {
+        // Retrieve the current product or fail if not found
+        $product = Product::findOrFail($productId);
+
+        // Query products in the same category, excluding the current product
+        return Product::where('category_id', $product->category_id)
+            ->where('id', '!=', $product->id) // Exclude the current product
+            ->active() // Scope: only active products
+            ->inRandomOrder() // Randomize the order
+            ->take($limit) // Limit the number of results
+            ->get(); // Fetch the results
+    }
+
 
     /**
      * Build a query with optional filters.

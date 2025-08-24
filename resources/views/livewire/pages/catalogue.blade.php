@@ -4,14 +4,16 @@ use Livewire\Volt\Component;
 use Livewire\WithPagination;
 use Livewire\Attributes\Layout;
 use App\Services\ProductService;
+use Livewire\WithoutUrlPagination;
 
 new #[Layout('components.layouts.guest')]
     class extends Component {
-    use WithPagination;
+    use WithPagination, WithoutUrlPagination;
 
-    public $query = '';
-    public $itemsPerPage = 12;
-    public $totalItems = 0;
+    public string $query = '';
+    public string $category = '';
+    public int $itemsPerPage = 12;
+
     protected $paginationTheme = 'bootstrap'; // optional for Bootstrap UI
 
     // Reset pagination when search changes
@@ -20,21 +22,38 @@ new #[Layout('components.layouts.guest')]
         $this->resetPage();
     }
 
+    public function mount(string $slug = '')
+    {
+        // just store the category slug from route
+        $this->category = $slug;
+
+    }
+
     public function with(ProductService $productService): array
     {
-        $products = $productService->getPaginatedProducts(
-            $this->itemsPerPage,
-            $this->query
-        );
+        if (!empty($this->category)) {
+            $products = $productService->getProductsByCategory(
+                $this->category,
+                $this->itemsPerPage,
+                $this->query
+            );
+        } else {
+            $products = $productService->getPaginatedProducts(
+                $this->itemsPerPage,
+                $this->query
+            );
+        }
 
         return [
             'products' => $products,
             'itemsPerPage' => $this->itemsPerPage,
-            'totalItems' => $productService->productsCount(),
+            'totalItems' => $products->total(),
         ];
     }
+
 };
 ?>
+
 
 <div class="page-content">
     <div class="container">
@@ -45,7 +64,9 @@ new #[Layout('components.layouts.guest')]
         <div class="products">
             <div class="row">
                 @foreach ($products as $product)
+
                     <livewire:components.products.product-card :product="$product" :key="$product['id']" />
+
                 @endforeach
             </div>
 

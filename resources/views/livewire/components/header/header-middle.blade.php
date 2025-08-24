@@ -30,36 +30,36 @@ new class extends Component {
                                 ['href' => route('shop.category', 'sports'), 'label' => 'Sports'],
                             ]
                         ],
-                        [
-                            'title' => 'Shop Pages',
-                            'items' => [
-                                ['href' => route('cart'), 'label' => 'Cart'],
-                                ['href' => route('checkout'), 'label' => 'Checkout'],
-                                ['href' => route('wishlist'), 'label' => 'Wishlist'],
-                                ['href' => route('dashboard'), 'label' => 'My Account'],
-                                ['href' => route('track-order'), 'label' => 'Track Order'],
-                            ]
-                        ],
+                        // [
+                        //     'title' => 'Shop Pages',
+                        //     'items' => [
+                        //         ['href' => route('cart'), 'label' => 'Cart'],
+                        //         ['href' => route('checkout'), 'label' => 'Checkout'],
+                        //         ['href' => route('wishlist'), 'label' => 'Wishlist'],
+                        //         ['href' => route('dashboard'), 'label' => 'My Account'],
+                        //         ['href' => route('track-order'), 'label' => 'Track Order'],
+                        //     ]
+                        // ],
                     ],
                     'banner' => ['href' => route('shop.index'), 'image' => 'assets/images/menu/banner-1.jpg', 'title' => 'Last Chance Sale'],
                 ],
             ],
-            [
-                'label' => 'Product',
-                'href' => route('product.show', 'sample-t-shirt'),
-                'active' => request()->routeIs('product.show'),
-                'megamenu' => [
-                    'sidebar' => [
-                        [
-                            'title' => 'Product Details',
-                            'items' => [
-                                ['href' => route('product.show', 'sample-t-shirt'), 'label' => 'Product Page'],
-                            ]
-                        ],
-                    ],
-                    'banner' => ['href' => route('shop.index'), 'image' => 'assets/images/menu/banner-2.jpg', 'title' => 'New Trends Spring 2019'],
-                ],
-            ],
+            // [
+            //     'label' => 'Product',
+            //     'href' => route('product.show', 'sample-t-shirt'),
+            //     'active' => request()->routeIs('product.show'),
+            //     'megamenu' => [
+            //         'sidebar' => [
+            //             [
+            //                 'title' => 'Product Details',
+            //                 'items' => [
+            //                     ['href' => route('product.show', 'sample-t-shirt'), 'label' => 'Product Page'],
+            //                 ]
+            //             ],
+            //         ],
+            //         'banner' => ['href' => route('shop.index'), 'image' => 'assets/images/menu/banner-2.jpg', 'title' => 'New Trends Spring 2019'],
+            //     ],
+            // ],
             [
                 'label' => 'Blog',
                 'href' => route('blog.index'),

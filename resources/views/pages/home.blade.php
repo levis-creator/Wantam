@@ -2973,31 +2973,118 @@
                             <li><a href="coming-soon.html">Coming Soon</a></li>
                         </ul>
                     </li>
-                    <li>
-                        <a href="blog.html">Blog</a>
+                    <div class="min-h-screen bg-gradient-to-br from-zinc-50 via-white to-zinc-100 dark:from-zinc-900 dark:via-zinc-800 dark:to-zinc-900">
+            <!-- Hero Section -->
+            <section class="relative py-20 lg:py-32 overflow-hidden">
+                <!-- Background decorations -->
+                <div class="absolute inset-0 bg-gradient-to-r from-primary-50 to-primary-100 dark:from-primary-900/20 dark:to-primary-800/20"></div>
+                <div class="absolute -top-40 -right-40 w-80 h-80 bg-primary-400/20 rounded-full blur-3xl"></div>
+                <div class="absolute -bottom-40 -left-40 w-80 h-80 bg-primary-600/20 rounded-full blur-3xl"></div>
+                
+                <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="text-center space-y-8">
+                        <div class="space-y-4">
+                            <h1 class="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight">
+                                <span class="block text-zinc-900 dark:text-white">Welcome to</span>
+                                <span class="block text-gradient">{{ config('app.name') }}</span>
+                            </h1>
+                            <p class="max-w-2xl mx-auto text-lg md:text-xl text-zinc-600 dark:text-zinc-400 text-balance">
+                                Discover amazing products with our modern e-commerce platform. Built with Laravel, Livewire, and cutting-edge design.
+                            </p>
+                        </div>
+                        
+                        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                            <a href="#" class="btn btn-primary btn-lg group">
+                                Start Shopping
+                                <svg class="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+                                </svg>
+                            </a>
+                            <a href="#" class="btn btn-secondary btn-lg">
+                                View Catalog
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </section>
 
-                        <ul>
-                            <li><a href="blog.html">Classic</a></li>
-                            <li><a href="blog-listing.html">Listing</a></li>
-                            <li>
-                                <a href="#">Grid</a>
-                                <ul>
-                                    <li><a href="blog-grid-2cols.html">Grid 2 columns</a></li>
-                                    <li><a href="blog-grid-3cols.html">Grid 3 columns</a></li>
-                                    <li><a href="blog-grid-4cols.html">Grid 4 columns</a></li>
-                                    <li><a href="blog-grid-sidebar.html">Grid sidebar</a></li>
-                                </ul>
-                            </li>
-                            <li>
-                                <a href="#">Masonry</a>
-                                <ul>
-                                    <li><a href="blog-masonry-2cols.html">Masonry 2 columns</a></li>
-                                    <li><a href="blog-masonry-3cols.html">Masonry 3 columns</a></li>
-                                    <li><a href="blog-masonry-4cols.html">Masonry 4 columns</a></li>
-                                    <li><a href="blog-masonry-sidebar.html">Masonry sidebar</a></li>
-                                </ul>
-                            </li>
-                            <li>
+            <!-- Features Section -->
+            <section class="py-16 lg:py-24">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="text-center space-y-4 mb-16">
+                        <h2 class="text-3xl md:text-4xl font-bold text-zinc-900 dark:text-white">
+                            Why Choose Us
+                        </h2>
+                        <p class="max-w-2xl mx-auto text-lg text-zinc-600 dark:text-zinc-400">
+                            Experience the best in online shopping with our premium features
+                        </p>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        <!-- Feature 1 -->
+                        <div class="card card-hover fade-in">
+                            <div class="card-body text-center space-y-4">
+                                <div class="w-16 h-16 mx-auto bg-gradient-to-br from-primary-500 to-primary-600 rounded-2xl flex items-center justify-center shadow-lg">
+                                    <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                                    </svg>
+                                </div>
+                                <h3 class="text-xl font-semibold text-zinc-900 dark:text-white">Lightning Fast</h3>
+                                <p class="text-zinc-600 dark:text-zinc-400">Optimized for speed and performance with modern web technologies</p>
+                            </div>
+                        </div>
+
+                        <!-- Feature 2 -->
+                        <div class="card card-hover fade-in">
+                            <div class="card-body text-center space-y-4">
+                                <div class="w-16 h-16 mx-auto bg-gradient-to-br from-success-500 to-success-600 rounded-2xl flex items-center justify-center shadow-lg">
+                                    <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                </div>
+                                <h3 class="text-xl font-semibold text-zinc-900 dark:text-white">Secure & Trusted</h3>
+                                <p class="text-zinc-600 dark:text-zinc-400">Your data and transactions are protected with enterprise-grade security</p>
+                            </div>
+                        </div>
+
+                        <!-- Feature 3 -->
+                        <div class="card card-hover fade-in">
+                            <div class="card-body text-center space-y-4">
+                                <div class="w-16 h-16 mx-auto bg-gradient-to-br from-warning-500 to-warning-600 rounded-2xl flex items-center justify-center shadow-lg">
+                                    <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                                    </svg>
+                                </div>
+                                <h3 class="text-xl font-semibold text-zinc-900 dark:text-white">Customer First</h3>
+                                <p class="text-zinc-600 dark:text-zinc-400">24/7 support and hassle-free returns for the best shopping experience</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- CTA Section -->
+            <section class="py-16 lg:py-24 bg-gradient-to-r from-primary-600 to-primary-700 dark:from-primary-800 dark:to-primary-900">
+                <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-8">
+                    <h2 class="text-3xl md:text-4xl font-bold text-white">
+                        Ready to Get Started?
+                    </h2>
+                    <p class="text-xl text-primary-100">
+                        Join thousands of satisfied customers and start your shopping journey today
+                    </p>
+                    <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                        <a href="#" class="btn bg-white text-primary-600 border-white hover:bg-primary-50 btn-lg">
+                            Browse Products
+                        </a>
+                        <a href="#" class="btn bg-transparent text-white border-white hover:bg-white/10 btn-lg">
+                            Learn More
+                        </a>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <li>
                                 <a href="#">Mask</a>
                                 <ul>
                                     <li><a href="blog-mask-grid.html">Blog mask grid</a></li>

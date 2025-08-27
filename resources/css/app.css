@@ -1,5 +1,5 @@
-@import 'tailwindcss';
-@import '../../vendor/livewire/flux/dist/flux.css';
+@import "tailwindcss";
+@import "../../vendor/livewire/flux/dist/flux.css";
 
 @source '../views';
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
@@ -9,7 +9,9 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
-    --font-sans: 'Inter', 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+    --font-sans: "Inter", "Instrument Sans", ui-sans-serif, system-ui,
+        sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
+        "Noto Color Emoji";
 
     /* Enhanced color palette */
     --color-zinc-50: #fafafa;
@@ -61,9 +63,12 @@
 
     /* Shadows */
     --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
-    --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1),
+        0 2px 4px -2px rgb(0 0 0 / 0.1);
+    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1),
+        0 4px 6px -4px rgb(0 0 0 / 0.1);
+    --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1),
+        0 8px 10px -6px rgb(0 0 0 / 0.1);
 
     /* Border radius */
     --radius-sm: 0.375rem;
@@ -91,11 +96,11 @@
 
     html {
         scroll-behavior: smooth;
-        font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+        font-feature-settings: "cv02", "cv03", "cv04", "cv11";
     }
 
     body {
-        font-feature-settings: 'rlig' 1, 'calt' 1;
+        font-feature-settings: "rlig" 1, "calt" 1;
         text-rendering: optimizeLegibility;
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
@@ -214,7 +219,7 @@ select:focus[data-flux-control] {
 
     /* Product cards */
     .product-card {
-        @apply group relative bg-white dark:bg-zinc-800 rounded-xl border border-zinc-200 dark:border-zinc-700 overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1;
+        @apply relative bg-white dark:bg-zinc-800 rounded-xl border border-zinc-200 dark:border-zinc-700 overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1;
     }
 
     .product-image {
@@ -299,11 +304,13 @@ select:focus[data-flux-control] {
 
     /* Shadows */
     .shadow-soft {
-        box-shadow: 0 2px 8px -1px rgb(0 0 0 / 0.08), 0 4px 16px -1px rgb(0 0 0 / 0.02);
+        box-shadow: 0 2px 8px -1px rgb(0 0 0 / 0.08),
+            0 4px 16px -1px rgb(0 0 0 / 0.02);
     }
 
     .shadow-strong {
-        box-shadow: 0 8px 32px -4px rgb(0 0 0 / 0.12), 0 4px 16px -2px rgb(0 0 0 / 0.04);
+        box-shadow: 0 8px 32px -4px rgb(0 0 0 / 0.12),
+            0 4px 16px -2px rgb(0 0 0 / 0.04);
     }
 
     /* Grid helpers */

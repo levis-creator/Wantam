@@ -44,7 +44,9 @@
     --color-success-200: #bbf7d0;
     --color-success-500: #22c55e;
     --color-success-600: #16a34a;
-    --color-success-700: #15803d; /* Tailwind default green-700 */
+    --color-success-700: #15803d; /* already missing */
+    --color-success-800: #166534; /* also missing */
+    --color-success-900: #14532d; /* 👈 add this */
 
     /* Warning colors */
     --color-warning-50: #fffbeb;

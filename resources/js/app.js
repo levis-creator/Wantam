@@ -1,13 +1,12 @@
-import Alpine from 'alpinejs';
-import persist from '@alpinejs/persist';
+import './bootstrap';
 
-// Register the persist plugin before starting Alpine
-Alpine.plugin(persist);
+import { Livewire, Alpine } from '../../vendor/livewire/livewire/dist/livewire.esm';
+import persist from '@alpinejs/persist'
 
-// Make Alpine available globally
-window.Alpine = Alpine;
+// Add the persist plugin
+Alpine.plugin(persist)
 
-// Start Alpine only once
-if (!window.Alpine.version) {
-    Alpine.start();
-}
+// Make Alpine available globally to avoid multiple instances
+window.Alpine = Alpine
+
+Livewire.start();

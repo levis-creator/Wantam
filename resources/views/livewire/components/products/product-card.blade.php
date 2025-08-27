@@ -115,11 +115,6 @@ new class extends Component {
                         aria-label="Add {{ $product->name }} to Cart">
                         <span>add to cart</span>
                     </a>
-
-                    <a href="#" wire:click.prevent="quickView" class="btn-product btn-quickview"
-                        aria-label="Quick view of {{ $product->name }}">
-                        <span>quick view</span>
-                    </a>
                 </div>
             </div>
         </div>

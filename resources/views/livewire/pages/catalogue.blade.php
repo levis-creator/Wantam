@@ -4,17 +4,16 @@ use Livewire\Volt\Component;
 use Livewire\WithPagination;
 use Livewire\Attributes\Layout;
 use App\Services\ProductService;
-use Livewire\WithoutUrlPagination;
 
 new #[Layout('components.layouts.guest')]
     class extends Component {
-    use WithPagination, WithoutUrlPagination;
+    use WithPagination;
 
     public string $query = '';
     public string $category = '';
     public int $itemsPerPage = 12;
 
-    protected $paginationTheme = 'bootstrap'; // optional for Bootstrap UI
+    protected $paginationTheme = 'bootstrap'; // or 'bootstrap' if views are published
 
     // Reset pagination when search changes
     public function updatedQuery()
@@ -24,25 +23,14 @@ new #[Layout('components.layouts.guest')]
 
     public function mount(string $slug = '')
     {
-        // just store the category slug from route
         $this->category = $slug;
-
     }
 
     public function with(ProductService $productService): array
     {
-        if (!empty($this->category)) {
-            $products = $productService->getProductsByCategory(
-                $this->category,
-                $this->itemsPerPage,
-                $this->query
-            );
-        } else {
-            $products = $productService->getPaginatedProducts(
-                $this->itemsPerPage,
-                $this->query
-            );
-        }
+        $products = !empty($this->category)
+            ? $productService->getProductsByCategory($this->category, $this->itemsPerPage, $this->query)
+            : $productService->getPaginatedProducts($this->itemsPerPage, $this->query);
 
         return [
             'products' => $products,
@@ -50,9 +38,9 @@ new #[Layout('components.layouts.guest')]
             'totalItems' => $products->total(),
         ];
     }
-
 };
 ?>
+
 
 
 <div class="page-content">

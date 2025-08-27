@@ -57,50 +57,66 @@ class ProductService
     {
         return ProductMapper::mapCollection($this->products);
     }
-
     /**
      * Retrieve paginated products with optional search term.
      *
-     * @param int $perPage
-     * @param string|null $search
-     * @return LengthAwarePaginator
+     * This method fetches products that are active (is_active = 1),
+     * eager loads their category and reviews, and applies an optional
+     * search filter on the product name. The results are returned as
+     * a paginated collection.
+     *
+     * @param int $perPage  Number of items per page for pagination.
+     * @param string|null $search Optional search keyword to filter products by name.
+     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
      */
     public function getPaginatedProducts(int $perPage, ?string $search = null): LengthAwarePaginator
     {
-        $query = Product::with(['category', 'reviews'])->active();
+        $query = Product::with(['category', 'reviews'])->active(); // ✅ Using 'active' scope
 
+        // Apply search filter if keyword provided
         if (!empty($search)) {
             $query->where('name', 'like', "%{$search}%");
         }
 
         return $query->paginate($perPage);
     }
+
     /**
-     * Retrieve active products, prioritizing those in a specific category,
-     * then listing the rest, with pagination.
+     * Retrieve active products with prioritization by category.
      *
-     * @param string $categorySlug The slug of the category to prioritize.
-     * @param int $perPage Number of items per page.
-     * @param string|null $search Optional search term to filter by product name.
+     * This method fetches active products, eager loads category & reviews,
+     * and prioritizes products belonging to a given category by ordering
+     * them first, while still including all other active products.
+     *
+     * It also supports an optional search filter on the product name.
+     *
+     * Example:
+     * - If $categorySlug = "electronics", all electronics will appear
+     *   first in the paginated results, followed by all other categories.
+     *
+     * @param string $categorySlug  The slug of the category to prioritize.
+     * @param int $perPage          Number of items per page (default 12).
+     * @param string|null $search   Optional search keyword to filter products by name.
      * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
      */
     public function getProductsByCategory(string $categorySlug, int $perPage = 12, ?string $search = null): LengthAwarePaginator
     {
         $query = Product::with(['category', 'reviews'])
-            ->where('products.is_active', 1); // ✅ explicitly specify table
+            ->where('products.is_active', 1); // ✅ Explicitly qualify column name
 
+        // Apply search filter if keyword provided
         if (!empty($search)) {
-            $query->where('products.name', 'like', "%{$search}%"); // also qualify
+            $query->where('products.name', 'like', "%{$search}%"); // ✅ Qualified with table name
         }
 
+        // Join categories to check the slug for prioritization
         $query->leftJoin('categories', 'products.category_id', '=', 'categories.id')
-            ->select('products.*')
-            ->orderByRaw("CASE WHEN categories.slug = ? THEN 0 ELSE 1 END", [$categorySlug])
-            ->orderBy('products.created_at', 'desc');
+            ->select('products.*') // ✅ Ensure only product fields are selected
+            ->orderByRaw("CASE WHEN categories.slug = ? THEN 0 ELSE 1 END", [$categorySlug]) // ✅ Prioritize matching category
+            ->orderBy('products.created_at', 'desc'); // ✅ Secondary sort (latest products first)
 
         return $query->paginate($perPage);
     }
-
 
 
     /**

@@ -283,23 +283,23 @@ select:focus[data-flux-control] {
 
     /* Animations */
     .fade-in {
-        @apply animate-in fade-in duration-300;
+        @apply motion-safe:animate-in motion-safe:fade-in duration-300;
     }
 
     .slide-in-bottom {
-        @apply animate-in slide-in-from-bottom-4 duration-300;
+        @apply motion-safe:animate-in motion-safe:slide-in-from-bottom-4 duration-300;
     }
 
     .slide-in-top {
-        @apply animate-in slide-in-from-top-4 duration-300;
+        @apply motion-safe:animate-in motion-safe:slide-in-from-top-4 duration-300;
     }
 
     .slide-in-left {
-        @apply animate-in slide-in-from-left-4 duration-300;
+        @apply motion-safe:animate-in motion-safe:slide-in-from-left-4 duration-300;
     }
 
     .slide-in-right {
-        @apply animate-in slide-in-from-right-4 duration-300;
+        @apply motion-safe:animate-in motion-safe:slide-in-from-right-4 duration-300;
     }
 }
 

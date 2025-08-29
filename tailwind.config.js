@@ -1,18 +1,15 @@
-// tailwind.config.ts
-import { defineConfig } from 'tailwindcss'
+import motion from "tailwindcss-motion";
 
-export default defineConfig({
+export default {
+  content: [
+    "./resources/**/*.blade.php",
+    "./resources/**/*.js",
+    "./resources/**/*.vue",
+    "./resources/**/*.jsx",
+    "./resources/**/*.tsx",
+  ],
   theme: {
-    extend: {
-      keyframes: {
-        "slide-in-from-bottom": {
-          "0%": { transform: "translateY(1rem)", opacity: "0" },
-          "100%": { transform: "translateY(0)", opacity: "1" },
-        },
-      },
-      animation: {
-        "slide-in-from-bottom": "slide-in-from-bottom 0.5s ease-out",
-      },
-    },
+    extend: {},
   },
-})
+  plugins: [motion],
+}

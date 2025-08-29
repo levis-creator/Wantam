@@ -11,17 +11,6 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
-    @keyframes fade-in {
-        from {
-            opacity: 0;
-        }
-        to {
-            opacity: 1;
-        }
-    }
-
-    --animate-fade-in: fade-in 0.3s ease-in-out;
-
     --font-sans: "Inter", "Instrument Sans", ui-sans-serif, system-ui,
         sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
         "Noto Color Emoji";

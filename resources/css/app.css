@@ -312,9 +312,6 @@ select:focus[data-flux-control] {
 }
 
 @layer utilities {
-    .fade-in {
-        animation: fade-in 0.3s ease-in-out;
-    }
     /* Text utilities */
     .text-gradient {
         @apply bg-gradient-to-r from-primary-600 to-primary-800 bg-clip-text text-transparent;

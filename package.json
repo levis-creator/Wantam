@@ -22,6 +22,6 @@
         "lightningcss-linux-x64-gnu": "^1.29.1"
     },
     "devDependencies": {
-        "tailwindcss-animate": "^1.0.7"
+
     }
 }

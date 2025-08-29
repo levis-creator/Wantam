@@ -1,4 +1,6 @@
 import motion from "tailwindcss-motion";
+import animate from "tailwindcss-animate";
+
 
 export default {
   content: [
@@ -11,5 +13,5 @@ export default {
   theme: {
     extend: {},
   },
-  plugins: [motion],
+  plugins: [motion, animate],
 }

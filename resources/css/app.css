@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @plugin "tailwindcss-motion";
+@plugin "tailwindcss-animate";
 
 @import "../../vendor/livewire/flux/dist/flux.css";
 

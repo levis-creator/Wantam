@@ -282,9 +282,9 @@ select:focus[data-flux-control] {
     }
 
     /* Animations */
-    .fade-in {
+    /* .fade-in {
         @apply motion-safe:animate-in motion-safe:fade-in duration-300;
-    }
+    } */
 
     .slide-in-bottom {
         @apply motion-safe:animate-in motion-safe:slide-in-from-bottom-4 duration-300;
